@@ -136,6 +136,7 @@ sub Build_PL {
 
 	for my $file (glob 'planner/*.pl') {
 		my $inner = $planner->new_scope;
+		$inner->add_delegate('self', sub { $inner });
 		$inner->add_delegate('outer', sub { $planner });
 		$inner->run_dsl($file);
 	}
