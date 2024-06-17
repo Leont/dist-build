@@ -150,9 +150,9 @@ sub Build_PL {
 	if (my $dynamic = $meta->custom('x_dynamic_prereqs')) {
 		my %meta = (%{ $meta->as_struct }, dynamic_config => 0);
 		require CPAN::Requirements::Dynamic;
-		my $dynamic_parser = CPAN::Requirements::Dynamic->new(%options);
+		my $dynamic_parser = CPAN::Requirements::Dynamic->new(%options, prereqs => $meta->effective_prereqs);
 		my $prereq = $dynamic_parser->evaluate($dynamic);
-		$meta{prereqs} = $meta->effective_prereqs->with_merged_prereqs($prereq)->as_string_hash;
+		$meta{prereqs} = $prereq->as_string_hash;
 		$meta = CPAN::Meta->new(\%meta);
 	}
 	$meta->save('MYMETA.json');
