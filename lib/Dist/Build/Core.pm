@@ -14,6 +14,7 @@ use File::Basename qw/dirname/;
 use File::Copy ();
 use File::Path qw/make_path/;
 use File::Spec::Functions qw/catdir rel2abs/;
+use Parse::CPAN::Meta;
 
 use ExtUtils::Builder::Node;
 use ExtUtils::Builder::Action::Function;
@@ -93,7 +94,41 @@ sub add_methods {
 				new_action('install', install_map => $options{install_map}),
 			]
 		);
-	})
+	});
+
+	$self->add_delegate($planner, 'dump_binary', sub {
+		my ($target, %options) = @_;
+		ExtUtils::Builder::Node->new(
+			target       => $target,
+			dependencies => $options{dependencies},
+			actions      => [
+				new_action('dump_binary', $options{content}),
+			]
+		);
+	});
+
+	$self->add_delegate($planner, 'dump_text', sub {
+		my ($target, %options) = @_;
+		ExtUtils::Builder::Node->new(
+			target       => $target,
+			dependencies => $options{dependencies},
+			actions      => [
+				new_action('dump_text', $options{content}, $options{encoding} || 'utf-8'),
+			]
+		);
+	});
+
+	$self->add_delegate($planner, 'dump_json', sub {
+		my ($target, %options) = @_;
+		ExtUtils::Builder::Node->new(
+			target       => $target,
+			dependencies => $options{dependencies},
+			actions      => [
+				new_action('dump_json', $options{content}),
+			]
+		);
+	});
+
 }
 
 sub copy {
@@ -149,6 +184,27 @@ sub install {
 	my (%args) = @_;
 	ExtUtils::Install::install($args{install_map}, $args{verbose}, $args{dry_run}, $args{uninst});
 	return;
+}
+
+sub dump_binary {
+	my ($filename, $content) = @_;
+	open my $fh, '>:raw', $filename;
+	print $fh $content;
+}
+
+sub dump_text {
+	my ($filename, $content, $encoding) = @_;
+	open my $fh, ">:encoding($encoding)", $filename;
+	print $fh $content;
+}
+
+my $json_backend = Parse::CPAN::Meta->json_backend;
+my $json = $json_backend->new->canonical->pretty->utf8;
+
+sub dump_json {
+	my ($filename, $content) = @_;
+	open my $fh, '>:raw', $filename;
+	print $fh $json->encode($content);
 }
 
 1;
@@ -218,5 +274,17 @@ This enables verbose mode.
 This uninstalls files before installing the new ones.
 
 =back
+
+=item * dump_binary($filename, $content)
+
+Write C<$content> to C<$filename> as binary data.
+
+=item * dump_text($filename, $content, $encoding = 'utf8')
+
+Write C<$content> to C<$filename> as text of the given encoding.
+
+=item * dump_json($filename, $content)
+
+Write C<$content> to C<$filename> as JSON.
 
 =back
