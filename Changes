@@ -1,6 +1,7 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+          - Sort test files
           - Add self delegate for DSL
 
 0.003     2024-04-27 22:55:07+02:00 Europe/Brussels

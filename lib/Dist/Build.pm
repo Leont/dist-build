@@ -121,7 +121,7 @@ sub Build_PL {
 	$planner->create_phony('pure_all', 'code', 'manify', 'dynamic');
 	$planner->create_phony('build', 'pure_all');
 
-	$planner->tap_harness('test', dependencies => [ 'pure_all' ], test_files => [ find(qr/\.t$/, 't')]);
+	$planner->tap_harness('test', dependencies => [ 'pure_all' ], test_files => [ sort +find(qr/\.t$/, 't')]);
 	$planner->install('install', dependencies => [ 'pure_all' ], install_map => $options{install_paths}->install_map);
 
 	$planner->add_delegate('meta', sub { $meta });
