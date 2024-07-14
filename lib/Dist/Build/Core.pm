@@ -149,7 +149,7 @@ sub tap_harness {
 
 sub install {
 	my (%args) = @_;
-	ExtUtils::Install::install($args{install_map}, $args{verbose}, 0, $args{uninst});
+	ExtUtils::Install::install($args{install_map}, $args{verbose}, $args{dry_run}, $args{uninst});
 	return;
 }
 
