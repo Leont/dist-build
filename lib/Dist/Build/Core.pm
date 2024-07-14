@@ -55,9 +55,10 @@ sub add_methods {
 	$self->add_delegate($planner, 'manify', sub {
 		my ($source, $destination, $section) = @_;
 		my $manify = new_action('manify', $source, $destination, $section);
+		my $dirname = dirname($destination);
 		ExtUtils::Builder::Node->new(
 			target       => $destination,
-			dependencies => [ $source ],
+			dependencies => [ $source, $dirname ],
 			actions      => [ $manify ],
 		);
 	});
