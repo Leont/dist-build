@@ -114,7 +114,9 @@ sub Build_PL {
 		}
 	}
 
-	$planner->mkdirs('config', map { catfile('blib', $_) } qw/lib arch bindoc libdoc script bin/);
+	my @blibs = map { catfile('blib', $_) } qw/lib arch bindoc libdoc script bin/;
+	$planner->mkdir($_) for @blibs;
+	$planner->create_phony('config', @blibs);
 	$planner->create_phony('code', 'config', values %most, values %scripts);
 	$planner->create_phony('manify', 'config', values %man1, values %man3);
 	$planner->create_phony('dynamic');

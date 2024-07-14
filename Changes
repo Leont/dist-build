@@ -1,6 +1,7 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+          - Fix argument handling in mkdir
 
 0.004     2024-07-13 13:49:39+02:00 Europe/Brussels
           - Sort test files
