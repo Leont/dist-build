@@ -1,6 +1,7 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+          - Make mkdir nodes non-phony
 
 0.005     2024-07-14 16:30:28+02:00 Europe/Brussels
           - Fix argument handling in mkdir

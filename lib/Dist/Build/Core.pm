@@ -67,7 +67,6 @@ sub add_methods {
 		my ($target, %options) = @_;
 		ExtUtils::Builder::Node->new(
 			target  => $target,
-			phony   => 1,
 			actions => [ new_action('mkdir', $target, %options) ],
 		);
 	});
