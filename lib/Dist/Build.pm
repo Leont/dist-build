@@ -16,7 +16,7 @@ use File::Spec::Functions qw/catfile catdir abs2rel /;
 use Getopt::Long 2.36 qw/GetOptionsFromArray/;
 use Parse::CPAN::Meta;
 
-use ExtUtils::Builder::Planner 0.007;
+use ExtUtils::Builder::Planner 0.008;
 use Dist::Build::Serializer;
 
 my $json_backend = Parse::CPAN::Meta->json_backend;

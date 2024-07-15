@@ -32,8 +32,8 @@ sub add_methods {
 
 		$planner = $planner->new_scope;
 
-		$planner->load_module("ExtUtils::Builder::ParseXS");
-		$planner->load_module("ExtUtils::Builder::AutoDetect::C");
+		$planner->load_module('ExtUtils::Builder::ParseXS');
+		$planner->load_module('ExtUtils::Builder::AutoDetect::C', '0.012');
 
 		my $xs_file = catfile('lib', split /::/, $module_name) . '.xs';
 		my $c_file = $planner->c_file_for_xs($xs_file, 'lib');
