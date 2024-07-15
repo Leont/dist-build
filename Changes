@@ -1,6 +1,8 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+
+0.006     2024-07-15 21:22:15+02:00 Europe/Brussels
           - Make mkdir nodes non-phony
           - Provide better messages for most actions
 
