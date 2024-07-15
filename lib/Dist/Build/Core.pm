@@ -101,7 +101,6 @@ sub copy {
 
 	make_path(dirname($target));
 	File::Copy::copy($source, $target) or croak "Could not copy: $!";
-	printf "cp %s %s\n", $source, $target;
 
 	my ($atime, $mtime) = (stat $source)[8,9];
 	utime $atime, $mtime, $target;
