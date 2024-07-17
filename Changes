@@ -2,6 +2,7 @@ Revision history for Dist-Build
 
 {{$NEXT}}
           - Properly depend on new ExtUtils::Builder::Compiler
+          - Fix misspelling of extra_linker_flags
 
 0.006     2024-07-15 21:22:15+02:00 Europe/Brussels
           - Make mkdir nodes non-phony

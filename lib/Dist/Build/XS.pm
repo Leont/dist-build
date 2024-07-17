@@ -80,7 +80,7 @@ sub add_methods {
 			profile      => '@Perl',
 			module_name  => $module_name,
 			mkdir        => 1,
-			extra_args   => get_flags($args{extra_linker_args}),
+			extra_args   => get_flags($args{extra_linker_flags}),
 			library_dirs => $args{library_dirs},
 			libraries    => $args{libraries},
 		);
