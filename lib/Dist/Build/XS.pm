@@ -21,14 +21,14 @@ sub add_methods {
 	$planner->add_delegate('add_xs', sub {
 		my ($planner, %args) = @_;
 
-		my $pureperl_only = $args{pureperl_only} || $planner->pureperl_only;
+		my $pureperl_only = $args{pureperl_only} // $planner->pureperl_only;
 		die "Can't build xs files under --pureperl-only\n" if $pureperl_only;
 
-		my $module_name = $args{module_name} || do {
+		my $module_name = $args{module_name} // do {
 			(my $dist_name = $planner->dist_name) =~ s/-/::/g;
 			$dist_name;
 		};
-		my $module_version = $args{module_version} || $planner->dist_version;
+		my $module_version = $args{module_version} // $planner->dist_version;
 
 		$planner = $planner->new_scope;
 
