@@ -35,8 +35,8 @@ sub add_methods {
 		$planner->load_module('ExtUtils::Builder::ParseXS');
 		$planner->load_module('ExtUtils::Builder::AutoDetect::C');
 
-		my $xs_file = catfile('lib', split /::/, $module_name) . '.xs';
-		my $c_file = $planner->c_file_for_xs($xs_file, 'lib');
+		my $xs_file = $args{file} // catfile('lib', split /::/, $module_name) . '.xs';
+		my $c_file = $planner->c_file_for_xs($xs_file);
 
 		my @dependencies = -f 'typemap' ? 'typemap' : ();
 
@@ -121,6 +121,10 @@ The name of the module to be compiled. This defaults to C<$dist_name =~ s/-/::/g
 =item * module_version
 
 The version of the module, defaulting to the dist version.
+
+=item * file
+
+The name of the XS file. By default it's derived from the C<$module_name>, e.g. C<lib/Foo/Bar.xs> for C<Foo::Bar>.
 
 =item * defines
 
