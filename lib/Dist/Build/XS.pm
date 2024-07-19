@@ -36,13 +36,14 @@ sub add_methods {
 		$planner->load_module('ExtUtils::Builder::AutoDetect::C');
 
 		my $xs_file = $args{file} // catfile('lib', split /::/, $module_name) . '.xs';
-		my $c_file = $planner->c_file_for_xs($xs_file);
+		my $xs_dir = dirname($xs_file);
+		my $c_file = $planner->c_file_for_xs($xs_file, $xs_dir);
 
 		my @dependencies = -f 'typemap' ? 'typemap' : ();
 
 		$planner->parse_xs($xs_file, $c_file, dependencies => \@dependencies);
 
-		my $o_file = $planner->obj_file(basename($c_file, '.c'));
+		my $o_file = $planner->obj_file(basename($c_file, '.c'), $xs_dir);
 
 		my %defines = (
 			%{ $args{defines} || {} },
@@ -63,7 +64,8 @@ sub add_methods {
 		my @objects = ($o_file, @{ $args{extra_objects} || [] });
 
 		for my $source (@{ $args{extra_sources} }) {
-			my $object = $planner->obj_file(basename($source, '.c'));
+			my $dirname = dirname($source);
+			my $object = $planner->obj_file(basename($source, '.c'), $dirname);
 			$planner->compile($source, $object,
 				type         => 'loadable-object',
 				profile      => '@Perl',
