@@ -1,6 +1,8 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+
+0.007     2024-07-20 15:19:09+02:00 Europe/Brussels
           - Properly depend on new ExtUtils::Builder::Compiler
           - Fix misspelling of extra_linker_flags
           - Add file argument to Dist::Build::XS
