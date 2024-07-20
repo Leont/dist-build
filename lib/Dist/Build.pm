@@ -136,6 +136,12 @@ sub Build_PL {
 		$planner->add_delegate($variable, sub { $options{$variable} });
 	}
 
+	$planner->add_delegate('new_planner', sub {
+		my $inner = ExtUtils::Builder::Planner->new;
+		$inner->add_delegate('config', sub { $options{config} });
+		return $inner;
+	});
+
 	for my $file (glob 'planner/*.pl') {
 		my $inner = $planner->new_scope;
 		$inner->add_delegate('self', sub { $inner });
