@@ -24,10 +24,18 @@ sub add_methods {
 		my $pureperl_only = $args{pureperl_only} // $planner->pureperl_only;
 		die "Can't build xs files under --pureperl-only\n" if $pureperl_only;
 
-		my $module_name = $args{module_name} // do {
-			(my $dist_name = $planner->dist_name) =~ s/-/::/g;
-			$dist_name;
-		};
+		my $xs_base = $args{xs_base} || 'lib';
+		my ($module_name, $xs_file);
+		if (defined $args{module_name}) {
+			$module_name = $args{module_name};
+			$xs_file = $args{file} // catfile($xs_base, split /::/, $module_name) . '.xs';
+		} elsif (defined $args{file}) {
+			$xs_file = $args{file};
+			$module_name = $planner->module_for_xs($xs_file, $xs_base);
+		} else {
+			($module_name = $planner->dist_name) =~ s/-/::/g;
+			$xs_file = catfile($xs_base, split /::/, $module_name) . '.xs';
+		}
 		my $module_version = $args{module_version} // $planner->dist_version;
 
 		$planner = $planner->new_scope;
@@ -35,7 +43,6 @@ sub add_methods {
 		$planner->load_module('ExtUtils::Builder::ParseXS') unless $planner->can('parse_xs');
 		$planner->load_module('ExtUtils::Builder::AutoDetect::C') unless $planner->can('compile');
 
-		my $xs_file = $args{file} // catfile('lib', split /::/, $module_name) . '.xs';
 		my $xs_dir = dirname($xs_file);
 		my $c_file = $planner->c_file_for_xs($xs_file, $xs_dir);
 
@@ -117,7 +124,7 @@ This method takes the following named arguments, all optional:
 
 =item * module_name
 
-The name of the module to be compiled. This defaults to C<$dist_name =~ s/-/::/gr>.
+The name of the module to be compiled. This defaults to C<$dist_name =~ s/-/::/gr> unless C<file> is given, in which case the name is derived from the path.
 
 =item * module_version
 
