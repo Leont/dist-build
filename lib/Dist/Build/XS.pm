@@ -39,9 +39,7 @@ sub add_methods {
 		my $xs_dir = dirname($xs_file);
 		my $c_file = $planner->c_file_for_xs($xs_file, $xs_dir);
 
-		my @dependencies = -f 'typemap' ? 'typemap' : ();
-
-		$planner->parse_xs($xs_file, $c_file, dependencies => \@dependencies);
+		$planner->parse_xs($xs_file, $c_file, %args);
 
 		my $o_file = $planner->obj_file(basename($c_file, '.c'), $xs_dir);
 
