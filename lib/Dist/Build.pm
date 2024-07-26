@@ -81,29 +81,13 @@ sub Build_PL {
 
 	my %modules = map { $_ => catfile('blib', $_) } find(qr/\.pm$/, 'lib');
 	my %docs    = map { $_ => catfile('blib', $_) } find(qr/\.pod$/, 'lib');
-	my %scripts = map { $_ => catfile('blib', $_) } find(qr/(?:)/, 'script');
-	my %sdocs   = map { $_ => delete $scripts{$_} } grep { /.pod$/ } keys %scripts;
 
-	my %most = (%modules, %docs, %sdocs);
-
+	my %most = (%modules, %docs);
 	for my $source (keys %most) {
 		$planner->copy_file($source, $most{$source});
 	}
 
-	for my $source (keys %scripts) {
-		$planner->copy_executable($source, $scripts{$source});
-	}
-
-	my (%man1, %man3);
-	if ($options{install_paths}->is_default_installable('bindoc')) {
-		my $section1 = $options{config}->get('man1ext');
-		my @files = grep { contains_pod($_) } keys %scripts, keys %sdocs;
-		for my $source (@files) {
-			my $destination = catfile('blib', 'bindoc', man1_pagename($source));
-			$planner->manify($source, $destination, $section1);
-			$man1{$source} = $destination;
-		}
-	}
+	my %man3;
 	if ($options{install_paths}->is_default_installable('libdoc')) {
 		my $section3 = $options{config}->get('man3ext');
 		my @files = grep { contains_pod($_) } keys %modules, keys %docs;
@@ -117,8 +101,8 @@ sub Build_PL {
 	my @blibs = map { catfile('blib', $_) } qw/lib arch bindoc libdoc script bin/;
 	$planner->mkdir($_) for @blibs;
 	$planner->create_phony('config', @blibs);
-	$planner->create_phony('code', 'config', values %most, values %scripts);
-	$planner->create_phony('manify', 'config', values %man1, values %man3);
+	$planner->create_phony('code', 'config', values %most);
+	$planner->create_phony('manify', 'config', values %man3);
 	$planner->create_phony('dynamic');
 	$planner->create_phony('pure_all', 'code', 'manify', 'dynamic');
 	$planner->create_phony('build', 'pure_all');
@@ -141,6 +125,8 @@ sub Build_PL {
 		$inner->add_delegate('config', sub { $options{config} });
 		return $inner;
 	});
+
+	$planner->script_dir('script');
 
 	for my $file (glob 'planner/*.pl') {
 		my $inner = $planner->new_scope;

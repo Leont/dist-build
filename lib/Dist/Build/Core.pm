@@ -12,8 +12,9 @@ use Carp qw/croak/;
 use ExtUtils::Install ();
 use File::Basename qw/dirname/;
 use File::Copy ();
+use File::Find 'find';
 use File::Path qw/make_path/;
-use File::Spec::Functions qw/catdir rel2abs/;
+use File::Spec::Functions qw/catdir catfile rel2abs/;
 use Parse::CPAN::Meta;
 
 use ExtUtils::Builder::Node;
@@ -129,6 +130,41 @@ sub add_methods {
 		);
 	});
 
+	$planner->add_delegate('script_files', sub {
+		my ($planner, @files) = @_;
+		my %scripts = map { $_ => catfile('blib', $_) } @files;
+		my %sdocs   = map { $_ => delete $scripts{$_} } grep { /.pod$/ } keys %scripts;
+
+		for my $source (keys %sdocs) {
+			$planner->copy_file($source, $scripts{$source});
+		}
+
+		for my $source (keys %scripts) {
+			$planner->copy_executable($source, $scripts{$source});
+		}
+
+		my (%man1);
+		if ($planner->install_paths->is_default_installable('bindoc')) {
+			my $section1 = $planner->config->get('man1ext');
+			my @files = keys %scripts, keys %sdocs;
+			for my $source (@files) {
+				next unless Dist::Build::contains_pod($source);
+				my $destination = catfile('blib', 'bindoc', man1_pagename($source));
+				$planner->manify($source, $destination, $section1);
+				$man1{$source} = $destination;
+			}
+		}
+
+		$planner->create_phony('code', values %scripts);
+		$planner->create_phony('manify', values %man1);
+	});
+
+	$planner->add_delegate('script_dir', sub {
+		my ($planner, $dir) = @_;
+
+		my @files = Dist::Build::find(qr/(?!\.)/, 'script');
+		$planner->script_files(@files);
+	});
 }
 
 sub copy {
