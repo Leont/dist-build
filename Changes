@@ -2,6 +2,7 @@ Revision history for Dist-Build
 
 {{$NEXT}}
           - Add compilation configurator
+          - Only load Dist::Build::XS dependencies when necessary
 
 0.007     2024-07-20 15:19:09+02:00 Europe/Brussels
           - Properly depend on new ExtUtils::Builder::Compiler
