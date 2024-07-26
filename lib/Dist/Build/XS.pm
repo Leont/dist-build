@@ -59,7 +59,7 @@ sub add_methods {
 			extra_args   => $compiler_flags,
 		);
 
-		my @objects = ($o_file, @{ $args{extra_objects} || [] });
+		my @objects = $o_file;
 
 		for my $source (@{ $args{extra_sources} }) {
 			my $dirname = dirname($source);
@@ -73,6 +73,8 @@ sub add_methods {
 			);
 			push @objects, $object;
 		}
+
+		push @objects, @{ $args{extra_objects} } if $args{extra_objects};
 
 		my $lib_file = $planner->extension_filename($module_name);
 		$planner->link(\@objects, $lib_file,
