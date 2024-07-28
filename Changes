@@ -5,6 +5,7 @@ Revision history for Dist-Build
           - Only load Dist::Build::XS dependencies when necessary
           - Remove curdir and inc/ from automatic include paths in Dist::Build::XS
           - Allow file to be specified instead of module in Dist::Build::XS
+          - Allow sources to be a hash in Dist::Build::XS
 
 0.007     2024-07-20 15:19:09+02:00 Europe/Brussels
           - Properly depend on new ExtUtils::Builder::Compiler

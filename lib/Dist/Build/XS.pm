@@ -68,14 +68,18 @@ sub add_methods {
 		my @objects = $o_file;
 
 		for my $source (@{ $args{extra_sources} }) {
-			my $dirname = dirname($source);
-			my $object = $planner->obj_file(basename($source, '.c'), $dirname);
-			$planner->compile($source, $object,
+			my %options = ref $source ? %{ $source } : (source => $source);
+			my $dirname = dirname($options{source});
+			my $object  = $options{object} || $planner->obj_file(basename($options{source}, '.c'), $dirname);
+			my %defines = (%{ $args{defines} || {} }, %{ $options{defines} || {} });
+			my @include_dirs = (@{ $args{include_dirs} || [] }, @{ $options{include_dirs} || [] });
+			my @compiler_flags = (@{ $compiler_flags || [] }, @{ $options{flags} || [] });
+			$planner->compile($options{source}, $object,
 				type         => 'loadable-object',
 				profile      => '@Perl',
-				defines      => $args{defines},
-				include_dirs => $args{include_dirs},
-				extra_args   => $compiler_flags,
+				defines      => \%defines,
+				include_dirs => \@include_dirs,
+				extra_args   => \@compiler_flags,
 			);
 			push @objects, $object;
 		}
@@ -144,7 +148,31 @@ A list of directories to add to the include path. For the xs file the directory 
 
 =item * extra_sources
 
-A list of C files to compile with this module.
+A list of C files to compile with this module. Instead of just a name, entries can also be a hash with the following entries:
+
+=over 4
+
+=item * source
+
+The name of the input file. Mandatory.
+
+=item * object
+
+The name of the object that will be compiled. Will be derive from the source name by default.
+
+=item * include_dirs
+
+An array containing additional include directories for this objects
+
+=item * defines
+
+A hash containing additional defines for this object.
+
+=item * flags
+
+An array containing additional flags for this compilation.
+
+=back
 
 =item * extra_objects
 
