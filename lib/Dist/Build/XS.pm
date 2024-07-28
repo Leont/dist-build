@@ -48,14 +48,13 @@ sub add_methods {
 			VERSION    => qq/"$module_version"/,
 			XS_VERSION => qq/"$module_version"/,
 		);
-		my @include_dirs = (curdir, dirname($xs_file), 'include', @{ $args{include_dirs} || [] });
 
 		my $compiler_flags = get_flags($args{extra_compiler_flags});
 		$planner->compile($c_file, $o_file,
 			type         => 'loadable-object',
 			profile      => '@Perl',
 			defines      => \%defines,
-			include_dirs => \@include_dirs,
+			include_dirs => [ dirname($xs_file), @{ $args{include_dirs} || [] } ],
 			extra_args   => $compiler_flags,
 		);
 
@@ -68,7 +67,7 @@ sub add_methods {
 				type         => 'loadable-object',
 				profile      => '@Perl',
 				defines      => $args{defines},
-				include_dirs => \@include_dirs,
+				include_dirs => $args{include_dirs},
 				extra_args   => $compiler_flags,
 			);
 			push @objects, $object;
@@ -134,7 +133,7 @@ This hash contains defines for the C files. E.g. C<< { DEBUG => 1 } >>.
 
 =item * include_dirs
 
-A list of directories to add to the include path. The root directory of the distribution, the directory the XS file is in and C<include/> are automatically in this list.
+A list of directories to add to the include path. For the xs file the directory it is in is automatically added to this list.
 
 =item * extra_sources
 

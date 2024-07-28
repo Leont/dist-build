@@ -64,6 +64,7 @@ if ($has_compiler) {
 	$dist->add_file('planner/xs.pl', undent(<<'		---'));
 		load_module("Dist::Build::XS");
 		add_xs(
+			include_dirs  => [ 'include' ],
 			extra_sources => [ glob 'src/*.c' ],
 		);
 		---
