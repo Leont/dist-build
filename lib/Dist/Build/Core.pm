@@ -32,49 +32,49 @@ sub new_action {
 sub add_methods {
 	my ($self, $planner) = @_;
 
-	$self->add_delegate($planner, 'copy_file', sub {
-		my ($source, $destination) = @_;
+	$planner->add_delegate('copy_file', sub {
+		my (undef, $source, $destination) = @_;
 		my $copy = new_action('copy', $source, $destination);
-		ExtUtils::Builder::Node->new(
+		$planner->create_node(
 			target       => $destination,
 			dependencies => [ $source ],
 			actions      => [ $copy ],
 		);
 	});
 
-	$self->add_delegate($planner, 'copy_executable', sub {
-		my ($source, $destination) = @_;
+	$planner->add_delegate('copy_executable', sub {
+		my (undef, $source, $destination) = @_;
 		my $copy = new_action('copy', $source, $destination);
 		my $make_executable = new_action('make_executable', $destination);
-		ExtUtils::Builder::Node->new(
+		$planner->create_node(
 			target       => $destination,
 			dependencies => [ $source ],
 			actions      => [ $copy, $make_executable ],
 		);
 	});
 
-	$self->add_delegate($planner, 'manify', sub {
-		my ($source, $destination, $section) = @_;
+	$planner->add_delegate('manify', sub {
+		my (undef, $source, $destination, $section) = @_;
 		my $manify = new_action('manify', $source, $destination, $section);
 		my $dirname = dirname($destination);
-		ExtUtils::Builder::Node->new(
+		$planner->create_node(
 			target       => $destination,
 			dependencies => [ $source, $dirname ],
 			actions      => [ $manify ],
 		);
 	});
 
-	$self->add_delegate($planner, 'mkdir', sub {
-		my ($target, %options) = @_;
-		ExtUtils::Builder::Node->new(
+	$planner->add_delegate('mkdir', sub {
+		my (undef, $target, %options) = @_;
+		$planner->create_node(
 			target  => $target,
 			actions => [ new_action('mkdir', $target, %options) ],
 		);
 	});
 
-	$self->add_delegate($planner, 'tap_harness', sub {
-		my ($target, %options) = @_;
-		ExtUtils::Builder::Node->new(
+	$planner->add_delegate('tap_harness', sub {
+		my (undef, $target, %options) = @_;
+		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
 			phony        => 1,
@@ -84,9 +84,9 @@ sub add_methods {
 		);
 	});
 
-	$self->add_delegate($planner, 'install', sub {
-		my ($target, %options) = @_;
-		ExtUtils::Builder::Node->new(
+	$planner->add_delegate('install', sub {
+		my (undef, $target, %options) = @_;
+		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
 			phony        => 1,
@@ -96,9 +96,9 @@ sub add_methods {
 		);
 	});
 
-	$self->add_delegate($planner, 'dump_binary', sub {
-		my ($target, %options) = @_;
-		ExtUtils::Builder::Node->new(
+	$planner->add_delegate('dump_binary', sub {
+		my (undef, $target, %options) = @_;
+		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
 			actions      => [
@@ -107,9 +107,9 @@ sub add_methods {
 		);
 	});
 
-	$self->add_delegate($planner, 'dump_text', sub {
-		my ($target, %options) = @_;
-		ExtUtils::Builder::Node->new(
+	$planner->add_delegate('dump_text', sub {
+		my (undef, $target, %options) = @_;
+		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
 			actions      => [
@@ -118,9 +118,9 @@ sub add_methods {
 		);
 	});
 
-	$self->add_delegate($planner, 'dump_json', sub {
-		my ($target, %options) = @_;
-		ExtUtils::Builder::Node->new(
+	$planner->add_delegate('dump_json', sub {
+		my (undef, $target, %options) = @_;
+		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
 			actions      => [
