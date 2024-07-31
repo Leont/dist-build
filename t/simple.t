@@ -162,6 +162,8 @@ sub _slurp { do { local (@ARGV,$/)=$_[0]; <> } }
   if ($has_compiler) {
     XSLoader::load('Foo::Bar');
     is(Foo::Bar::foo(), "Hello World!\n", 'Can run XSub Foo::Bar::foo');
+    my $libref = pop @DynaLoader::dl_librefs;
+    DynaLoader::dl_unload_file($libref) if defined &DynaLoader::dl_unload_file;
   }
 
   require CPAN::Meta;
