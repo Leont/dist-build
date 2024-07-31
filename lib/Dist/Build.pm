@@ -61,13 +61,6 @@ sub find {
 	return @ret;
 }
 
-sub contains_pod {
-	my ($file) = @_;
-	open my $fh, '<:utf8', $file;
-	my $content = do { local $/; <$fh> };
-	return $content =~ /^\=(?:head|pod|item)/m;
-}
-
 sub Build_PL {
 	my ($args, $env) = @_;
 
@@ -79,30 +72,11 @@ sub Build_PL {
 	my $planner = ExtUtils::Builder::Planner->new;
 	$planner->load_module('Dist::Build::Core');
 
-	my %modules = map { $_ => catfile('blib', $_) } find(qr/\.pm$/, 'lib');
-	my %docs    = map { $_ => catfile('blib', $_) } find(qr/\.pod$/, 'lib');
-
-	my %most = (%modules, %docs);
-	for my $source (keys %most) {
-		$planner->copy_file($source, $most{$source});
-	}
-
-	my %man3;
-	if ($options{install_paths}->is_default_installable('libdoc')) {
-		my $section3 = $options{config}->get('man3ext');
-		my @files = grep { contains_pod($_) } keys %modules, keys %docs;
-		for my $source (@files) {
-			my $destination = catfile('blib', 'libdoc', man3_pagename($source));
-			$planner->manify($source, $destination, $section3);
-			$man3{$source} = $destination;
-		}
-	}
-
 	my @blibs = map { catfile('blib', $_) } qw/lib arch bindoc libdoc script bin/;
 	$planner->mkdir($_) for @blibs;
 	$planner->create_phony('config', @blibs);
-	$planner->create_phony('code', 'config', values %most);
-	$planner->create_phony('manify', 'config', values %man3);
+	$planner->create_phony('code', 'config');
+	$planner->create_phony('manify', 'config');
 	$planner->create_phony('dynamic');
 	$planner->create_phony('pure_all', 'code', 'manify', 'dynamic');
 	$planner->create_phony('build', 'pure_all');
@@ -126,6 +100,7 @@ sub Build_PL {
 		return $inner;
 	});
 
+	$planner->lib_dir('lib');
 	$planner->script_dir('script');
 
 	for my $file (glob 'planner/*.pl') {

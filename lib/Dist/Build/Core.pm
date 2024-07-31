@@ -9,12 +9,13 @@ use Exporter 5.57 'import';
 our @EXPORT_OK = qw/copy mkdir make_executable manify tap_harness install/;
 
 use Carp qw/croak/;
+use ExtUtils::Helpers 0.007 qw/man1_pagename man3_pagename/;
 use ExtUtils::Install ();
 use File::Basename qw/dirname/;
 use File::Copy ();
-use File::Find 'find';
+use File::Find ();
 use File::Path qw/make_path/;
-use File::Spec::Functions qw/catdir catfile rel2abs/;
+use File::Spec::Functions qw/catdir catfile abs2rel rel2abs/;
 use Parse::CPAN::Meta;
 
 use ExtUtils::Builder::Node;
@@ -28,6 +29,20 @@ sub new_action {
 		arguments => \@args,
 		exports   => 'explicit',
 	);
+}
+
+sub find {
+	my ($pattern, $dir) = @_;
+	my @ret;
+	File::Find::find(sub { push @ret, abs2rel($File::Find::name) if /$pattern/ && -f }, $dir) if -d $dir;
+	return @ret;
+}
+
+sub contains_pod {
+	my ($file) = @_;
+	open my $fh, '<:utf8', $file;
+	my $content = do { local $/; <$fh> };
+	return $content =~ /^\=(?:head|pod|item)/m;
 }
 
 sub add_methods {
@@ -148,7 +163,7 @@ sub add_methods {
 			my $section1 = $planner->config->get('man1ext');
 			my @files = keys %scripts, keys %sdocs;
 			for my $source (@files) {
-				next unless Dist::Build::contains_pod($source);
+				next unless contains_pod($source);
 				my $destination = catfile('blib', 'bindoc', man1_pagename($source));
 				$planner->manify($source, $destination, $section1);
 				$man1{$source} = $destination;
@@ -164,6 +179,34 @@ sub add_methods {
 
 		my @files = Dist::Build::find(qr/(?!\.)/, 'script');
 		$planner->script_files(@files);
+	});
+
+	$planner->add_delegate('lib_files', sub {
+		my ($planner, @files) = @_;
+		my %modules = map { $_ => catfile('blib', $_) } @files;
+
+		for my $source (keys %modules) {
+			$planner->copy_file($source, $modules{$source});
+		}
+
+		my %man3;
+		if ($planner->install_paths->is_default_installable('libdoc')) {
+			my $section3 = $planner->config->get('man3ext');
+			my @files = grep { contains_pod($_) } keys %modules;
+			for my $source (@files) {
+				my $destination = catfile('blib', 'libdoc', man3_pagename($source));
+				$planner->manify($source, $destination, $section3);
+				$man3{$source} = $destination;
+			}
+		}
+		$planner->create_phony('code', 'config', values %modules);
+		$planner->create_phony('manify', 'config', values %man3);
+	});
+
+	$planner->add_delegate('lib_dir', sub {
+		my ($planner, $dir) = @_;
+		my @files = find(qr/\.p(?:m|od)$/, $dir);
+		$planner->lib_files(@files);
 	});
 }
 
