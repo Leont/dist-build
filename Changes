@@ -1,6 +1,8 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+
+0.009     2024-08-01 23:01:19+02:00 Europe/Brussels
           - Make path portable in build tests
 
 0.008     2024-08-01 12:56:09+02:00 Europe/Brussels
