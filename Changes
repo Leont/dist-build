@@ -1,6 +1,8 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+
+0.008     2024-08-01 12:56:09+02:00 Europe/Brussels
           - Add compilation configurator
           - Only load Dist::Build::XS dependencies when necessary
           - Remove curdir and inc/ from automatic include paths in Dist::Build::XS
