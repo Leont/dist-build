@@ -95,7 +95,7 @@ sub add_methods {
 			dependencies => $options{dependencies},
 			phony        => 1,
 			actions      => [
-				new_action('tap_harness', test_files => $options{test_files} ),
+				new_action('tap_harness', test_dir => $options{test_dir} ),
 			],
 		);
 	});
@@ -177,7 +177,7 @@ sub add_methods {
 	$planner->add_delegate('script_dir', sub {
 		my ($planner, $dir) = @_;
 
-		my @files = Dist::Build::find(qr/(?!\.)/, 'script');
+		my @files = find(qr/(?!\.)/, 'script');
 		$planner->script_files(@files);
 	});
 
@@ -245,7 +245,13 @@ my @default_libs = map { catdir('blib', $_) } qw/arch lib/;
 
 sub tap_harness {
 	my (%args) = @_;
-	my @test_files = @{ delete $args{test_files} };
+	my @test_files;
+	if ($args{test_files}) {
+		@test_files = @{ delete $args{test_files} };
+	} else {
+		my $dir = delete $args{test_dir} // 't';
+		@test_files = sort +find(qr/\.t$/, $dir);
+	}
 	my @libs = $args{libs} ? @{ $args{libs} } : @default_libs;
 	my %test_args = (
 		(color => 1) x !!-t STDOUT,
