@@ -37,7 +37,7 @@ sub save_json {
 	return;
 }
 
-my @options = qw/install_base=s install_path=s% installdirs=s destdir=s prefix=s config=s% uninst:1 verbose:1 dry_run:1 pureperl_only|pureperl-only:1 create_packlist=i jobs=i/;
+my @options = qw/install_base=s install_path=s% installdirs=s destdir=s prefix=s config=s% uninst:1 verbose:1 dry_run:1 pureperl_only|pureperl-only:1 create_packlist=i jobs=i allow_mb_mismatch:1/;
 
 sub get_config {
 	my ($meta_name, @arguments) = @_;
