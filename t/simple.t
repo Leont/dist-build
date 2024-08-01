@@ -192,4 +192,9 @@ sub _slurp { do { local (@ARGV,$/)=$_[0]; <> } }
   ok( -f 'install/bin/simple', 'Script is installed');
 }
 
+{
+  ok( open2(my($in, $out), $^X, Build => 'clean'), 'Could run Build clean' );
+  my $output = do { local $/; <$in> };
+  like($output, qr{lib[\\/]Foo[\\/]Bar.c}, 'clean also cleans source file');
+}
 done_testing;

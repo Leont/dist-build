@@ -103,6 +103,8 @@ sub Build_PL {
 		$inner->run_dsl($file);
 	}
 
+	$planner->autoclean;
+
 	my $plan = $planner->materialize;
 
 	mkdir '_build' if not -d '_build';

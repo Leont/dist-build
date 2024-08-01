@@ -6,7 +6,7 @@ use warnings;
 use parent 'ExtUtils::Builder::Planner::Extension';
 
 use Exporter 5.57 'import';
-our @EXPORT_OK = qw/copy mkdir make_executable manify tap_harness install/;
+our @EXPORT_OK = qw/copy mkdir rm_r make_executable manify tap_harness install/;
 
 use Carp qw/croak/;
 use ExtUtils::Helpers 0.007 qw/man1_pagename man3_pagename/;
@@ -14,7 +14,7 @@ use ExtUtils::Install ();
 use File::Basename qw/dirname/;
 use File::Copy ();
 use File::Find ();
-use File::Path qw/make_path/;
+use File::Path qw/make_path remove_tree/;
 use File::Spec::Functions qw/catdir catfile abs2rel rel2abs/;
 use Parse::CPAN::Meta;
 
@@ -208,6 +208,28 @@ sub add_methods {
 		my @files = find(qr/\.p(?:m|od)$/, $dir);
 		$planner->lib_files(@files);
 	});
+
+	$planner->add_delegate('autoclean', sub {
+		my ($planner) = @_;
+		my @targets = grep { !/^blib\b/ } map { $_->target } grep { ! $_->phony } $planner->materialize->nodes;
+
+		$planner->create_node(
+			target       => 'clean',
+			phony        => 1,
+			actions      => [
+				new_action('rm_r', 'blib', @targets),
+			],
+		);
+
+		$planner->create_node(
+			target       => 'realclean',
+			phony        => 1,
+			dependencies => [ 'clean' ],
+			actions      => [
+				new_action('rm_r', 'Build', '_build', 'MYMETA.json', 'MYMETA.yml'),
+			],
+		);
+	});
 }
 
 sub copy {
@@ -226,6 +248,12 @@ sub copy {
 sub mkdir {
 	my ($source, %options) = @_;
 	make_path($source, \%options);
+	return;
+}
+
+sub rm_r {
+	my (@sources) = @_;
+	remove_tree(@sources);
 	return;
 }
 
