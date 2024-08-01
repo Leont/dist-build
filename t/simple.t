@@ -119,7 +119,8 @@ sub _slurp { do { local (@ARGV,$/)=$_[0]; <> } }
   my $output = do { local $/; <$in> };
   is( waitpid($pid, 0), $pid, 'Could run Build');
   is($?, 0, 'Build returned 0');
-  like( $output, qr{lib/Foo/Bar\.pm}, 'Build output looks correctly');
+  my $filename = catfile(qw/lib Foo Bar.pm/);
+  like($output, qr{\Q$filename}, 'Build output looks correctly');
   ok( -d 'blib',        "created blib" );
   ok( -d 'blib/lib',    "created blib/lib" );
   ok( -d 'blib/script', "created blib/script" );
