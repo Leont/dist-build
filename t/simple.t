@@ -44,6 +44,7 @@ if ($has_compiler) {
 		#include "perl.h"
 		#include "XSUB.h"
 		#include "foo.h"
+		#include "bar.h"
 
 		MODULE = Foo::Bar                PACKAGE = Foo::Bar
 
@@ -57,16 +58,25 @@ if ($has_compiler) {
 	$dist->add_file('include/foo.h', undent(<<'		---'));
 		char* foo();
 		---
+	$dist->add_file('inc/auto/share/module/TestLib/include/bar.h', undent(<<'		---'));
+		#define BAR 1
+		---
 	$dist->add_file('src/foo.c', undent(<<'		---'));
 		char* foo() {
 			return "Hello World!\n";
 		}
 		---
 	$dist->add_file('planner/xs.pl', undent(<<'		---'));
+		use lib 'inc';
 		load_module("Dist::Build::XS");
+		load_module("Dist::Build::XS::Export");
+		load_module("Dist::Build::XS::Import");
+
+		export_headers(dir => 'include');
 		add_xs(
 			include_dirs  => [ 'include' ],
 			extra_sources => [ glob 'src/*.c' ],
+			import        => [ 'TestLib' ],
 		);
 		---
 }
@@ -167,6 +177,7 @@ sub _slurp { do { local (@ARGV,$/)=$_[0]; <> } }
         my $libref = pop @DynaLoader::dl_librefs;
         DynaLoader::dl_unload_file($libref);
     }
+    ok( -f module_file('Foo::Bar', 'include/foo.h'), 'header file has been exported');
   }
 
   require CPAN::Meta;
