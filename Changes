@@ -2,6 +2,7 @@ Revision history for Dist-Build
 
 {{$NEXT}}
           - Add Dist::Build::XS::Alien
+          - Add support for exporting compilation flags.
           - Fix various issues in dump functions.
 
 0.014     2024-09-13 11:25:35+02:00 Europe/Brussels

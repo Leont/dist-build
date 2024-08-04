@@ -213,7 +213,7 @@ Various extensions exist that modify the behavior of C<add_xs>. Among these are:
 
 =item * L<Dist::Build::XS::Import|Dist::Build::XS::Import>
 
-This adds an C<import> argument to imports include directories exported by other modules using L<Dist::Build::XS::Export|Dist::Build::XS::Export>.
+This adds an C<import> argument to imports include directories and compilation flags exported by other modules using L<Dist::Build::XS::Export|Dist::Build::XS::Export>.
 
 =item * L<Dist::Build::XS::WriteConstants|Dist::Build::XS::WriteConstants>
 
