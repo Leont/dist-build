@@ -33,7 +33,7 @@ sub add_methods {
 			$xs_file = $args{file};
 			$module_name = $planner->module_for_xs($xs_file, $xs_base);
 		} else {
-			($module_name = $planner->dist_name) =~ s/-/::/g;
+			$module_name = $planner->main_module_name;
 			$xs_file = catfile($xs_base, split /::/, $module_name) . '.xs';
 		}
 		my $module_version = $args{module_version} // $planner->dist_version;
@@ -128,7 +128,7 @@ This method takes the following named arguments, all optional:
 
 =item * module_name
 
-The name of the module to be compiled. This defaults to C<$dist_name =~ s/-/::/gr> unless C<file> is given, in which case the name is derived from the path.
+The name of the module to be compiled. This defaults to C<$main_module_name> unless C<file> is given, in which case the name is derived from the path.
 
 =item * module_version
 

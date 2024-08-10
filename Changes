@@ -1,6 +1,7 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+          - Add main_module_name helper
 
 0.010     2024-08-04 00:41:56+02:00 Europe/Brussels
           - Add missing prereqs due to misconfigured dist.ini
