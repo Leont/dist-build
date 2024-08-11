@@ -42,7 +42,7 @@ my @options = qw/install_base=s install_path=s% installdirs=s destdir=s prefix=s
 sub get_config {
 	my ($meta_name, @arguments) = @_;
 	my %options;
-	GetOptionsFromArray([ @$_ ], \%options, @options) or die "Could not parse arguments" for @arguments;
+	GetOptionsFromArray($_, \%options, @options) or die "Could not parse arguments" for @arguments;
 
 	$options{$_} = detildefy($options{$_}) for grep { exists $options{$_} } qw/install_base destdir prefix/;
 	if ($options{install_path}) {
@@ -60,7 +60,7 @@ sub Build_PL {
 	my $meta = CPAN::Meta->load_file('META.json', { lazy_validation => 0 });
 
 	my @env = defined $env->{PERL_MB_OPT} ? split_like_shell($env->{PERL_MB_OPT}) : ();
-	my %options = get_config($meta->name, $args, \@env);
+	my %options = get_config($meta->name, [ @{$args} ], [ @env ]);
 
 	my $planner = ExtUtils::Builder::Planner->new;
 	$planner->load_module('Dist::Build::Core');
