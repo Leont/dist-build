@@ -1,6 +1,8 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+
+0.011     2024-08-11 23:19:50+02:00 Europe/Brussels
           - Let get_config modify build stage arguments
           - Add main_module_name helper
 
