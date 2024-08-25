@@ -9,6 +9,7 @@ use lib 't/lib';
 use DistGen qw/undent/;
 use XSLoader;
 use ExtUtils::HasCompiler 0.024 'can_compile_loadable_object';
+use File::ShareDir::Tiny ':ALL';
 
 local $ENV{PERL_INSTALL_QUIET};
 local $ENV{PERL_MB_OPT};
@@ -149,13 +150,10 @@ sub _slurp { do { local (@ARGV,$/)=$_[0]; <> } }
 
   require blib;
   blib->import;
-  if (eval { require File::ShareDir }) {
-    ok( -d File::ShareDir::dist_dir('Foo-Bar'), 'sharedir has been made');
-    ok( -f File::ShareDir::dist_file('Foo-Bar', 'file.txt'), 'sharedir file has been made');
-    require Foo::Bar;
-    ok( -d File::ShareDir::module_dir('Foo::Bar'), 'sharedir has been made');
-    ok( -f File::ShareDir::module_file('Foo::Bar', 'file.txt'), 'sharedir file has been made');
-  }
+  ok( -d dist_dir('Foo-Bar'), 'sharedir has been made');
+  ok( -f dist_file('Foo-Bar', 'file.txt'), 'sharedir file has been made');
+  ok( -d module_dir('Foo::Bar'), 'sharedir has been made');
+  ok( -f module_file('Foo::Bar', 'file.txt'), 'sharedir file has been made');
   ok( -d catdir(qw/blib lib auto share dist Foo-Bar/), 'dist sharedir has been made');
   ok( -f catfile(qw/blib lib auto share dist Foo-Bar file.txt/), 'dist sharedir file has been made');
   ok( -d catdir(qw/blib lib auto share module Foo-Bar/), 'moduole sharedir has been made');
