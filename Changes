@@ -1,6 +1,8 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+
+0.012     2024-08-31 21:05:21+02:00 Europe/Brussels
           - Shorten module_name and module_version arguments in add_xs
           - Add support for exporting and importing headers
           - Pass on config in Dist::Build::XS
