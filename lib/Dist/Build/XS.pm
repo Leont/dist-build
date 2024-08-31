@@ -26,8 +26,8 @@ sub add_methods {
 
 		my $xs_base = $args{xs_base} || 'lib';
 		my ($module_name, $xs_file);
-		if (defined $args{module_name}) {
-			$module_name = $args{module_name};
+		if (defined $args{module}) {
+			$module_name = $args{module};
 			$xs_file = $args{file} // catfile($xs_base, split /::/, $module_name) . '.xs';
 		} elsif (defined $args{file}) {
 			$xs_file = $args{file};
@@ -36,7 +36,7 @@ sub add_methods {
 			$module_name = $planner->main_module_name;
 			$xs_file = catfile($xs_base, split /::/, $module_name) . '.xs';
 		}
-		my $module_version = $args{module_version} // $planner->dist_version;
+		my $module_version = $args{version} // $planner->dist_version;
 
 		$planner = $planner->new_scope;
 
@@ -126,11 +126,11 @@ This method takes the following named arguments, all optional:
 
 =over 4
 
-=item * module_name
+=item * module
 
 The name of the module to be compiled. This defaults to C<$main_module_name> unless C<file> is given, in which case the name is derived from the path.
 
-=item * module_version
+=item * version
 
 The version of the module, defaulting to the dist version.
 
