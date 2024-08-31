@@ -40,8 +40,8 @@ sub add_methods {
 
 		$planner = $planner->new_scope;
 
-		$planner->load_module('ExtUtils::Builder::ParseXS') unless $planner->can('parse_xs');
-		$planner->load_module('ExtUtils::Builder::AutoDetect::C') unless $planner->can('compile');
+		$planner->load_module('ExtUtils::Builder::ParseXS',       0.016, config => $args{config}) unless $planner->can('parse_xs');
+		$planner->load_module('ExtUtils::Builder::AutoDetect::C', 0.016, config => $args{config}) unless $planner->can('compile');
 
 		my $xs_dir = dirname($xs_file);
 		my $c_file = $planner->c_file_for_xs($xs_file, $xs_dir);
