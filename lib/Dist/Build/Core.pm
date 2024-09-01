@@ -182,8 +182,9 @@ sub add_methods {
 	});
 
 	$planner->add_delegate('lib_files', sub {
-		my ($planner, @files) = @_;
-		my %modules = map { $_ => catfile('blib', $_) } @files;
+		my ($planner, %args) = @_;
+		my $base    = $args{base} // 'lib';
+		my %modules = map { $_ => catfile('blib', 'lib', abs2rel($_, $base)) } @{ $args{files} };
 
 		for my $source (keys %modules) {
 			$planner->copy_file($source, $modules{$source});
@@ -194,7 +195,7 @@ sub add_methods {
 			my $section3 = $planner->config->get('man3ext');
 			my @files = grep { contains_pod($_) } keys %modules;
 			for my $source (@files) {
-				my $destination = catfile('blib', 'libdoc', man3_pagename($source));
+				my $destination = catfile('blib', 'libdoc', man3_pagename($source, $base));
 				$planner->manify($source, $destination, $section3);
 				$man3{$source} = $destination;
 			}
@@ -204,9 +205,9 @@ sub add_methods {
 	});
 
 	$planner->add_delegate('lib_dir', sub {
-		my ($planner, $dir) = @_;
-		my @files = find(qr/\.p(?:m|od)$/, $dir);
-		$planner->lib_files(@files);
+		my ($planner, $base) = @_;
+		my @files = find(qr/\.p(?:m|od)$/, $base);
+		$planner->lib_files(base => $base, files => \@files);
 	});
 
 	$planner->add_delegate('autoclean', sub {
