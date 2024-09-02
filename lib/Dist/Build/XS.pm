@@ -111,7 +111,7 @@ sub add_methods {
 
  load_module('Dist::Build::XS');
  add_xs(
-   module_name   => 'Foo::Bar',
+   module        => 'Foo::Bar',
    extra_sources => [ glob 'src/*.c' ],
    libraries     => [ 'foo' ],
  );
