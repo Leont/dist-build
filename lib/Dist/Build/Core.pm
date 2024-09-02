@@ -9,7 +9,7 @@ use Exporter 5.57 'import';
 our @EXPORT_OK = qw/copy mkdir rm_r make_executable manify tap_harness install/;
 
 use Carp qw/croak/;
-use ExtUtils::Helpers 0.007 qw/man1_pagename man3_pagename/;
+use ExtUtils::Helpers 0.007 qw/make_executable man1_pagename man3_pagename/;
 use ExtUtils::Install ();
 use File::Basename qw/dirname/;
 use File::Copy ();
@@ -256,11 +256,6 @@ sub rm_r {
 	my (@sources) = @_;
 	remove_tree(@sources);
 	return;
-}
-
-sub make_executable {
-	my ($target) = @_;
-	ExtUtils::Helpers::make_executable($target);
 }
 
 sub manify {
