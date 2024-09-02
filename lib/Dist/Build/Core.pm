@@ -9,7 +9,7 @@ use Exporter 5.57 'import';
 our @EXPORT_OK = qw/copy mkdir rm_r make_executable manify tap_harness install/;
 
 use Carp qw/croak/;
-use ExtUtils::Helpers 0.007 qw/make_executable man1_pagename man3_pagename/;
+use ExtUtils::Helpers 0.028 qw/make_executable man1_pagename man3_pagename/;
 use ExtUtils::Install ();
 use File::Basename qw/dirname/;
 use File::Copy ();
@@ -164,7 +164,7 @@ sub add_methods {
 			my @files = keys %scripts, keys %sdocs;
 			for my $source (@files) {
 				next unless contains_pod($source);
-				my $destination = catfile('blib', 'bindoc', man1_pagename($source));
+				my $destination = catfile('blib', 'bindoc', man1_pagename($source, $section1));
 				$planner->manify($source, $destination, $section1);
 				$man1{$source} = $destination;
 			}
@@ -195,7 +195,7 @@ sub add_methods {
 			my $section3 = $planner->config->get('man3ext');
 			my @files = grep { contains_pod($_) } keys %modules;
 			for my $source (@files) {
-				my $destination = catfile('blib', 'libdoc', man3_pagename($source, $base));
+				my $destination = catfile('blib', 'libdoc', man3_pagename($source, $base, $section3));
 				$planner->manify($source, $destination, $section3);
 				$man3{$source} = $destination;
 			}

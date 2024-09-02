@@ -2,6 +2,7 @@ Revision history for Dist-Build
 
 {{$NEXT}}
           - Add a base argument to lib_files
+          - Make extension for manpages overridable
 
 0.012     2024-08-31 21:05:21+02:00 Europe/Brussels
           - Shorten module_name and module_version arguments in add_xs

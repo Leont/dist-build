@@ -9,7 +9,7 @@ our @EXPORT = qw/Build Build_PL/;
 use Carp qw/croak/;
 use CPAN::Meta;
 use ExtUtils::Config;
-use ExtUtils::Helpers 0.007 qw/split_like_shell detildefy make_executable man1_pagename man3_pagename/;
+use ExtUtils::Helpers 0.007 qw/split_like_shell detildefy make_executable/;
 use ExtUtils::InstallPaths;
 use File::Find ();
 use File::Spec::Functions qw/catfile catdir abs2rel /;
