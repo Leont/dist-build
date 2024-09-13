@@ -1,6 +1,7 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+          - Add Dist::Build::XS::WriteConstants
 
 0.013     2024-09-03 18:30:13+02:00 Europe/Brussels
           - Add a base argument to lib_files
