@@ -49,7 +49,7 @@ sub add_methods {
 	my ($self, $planner) = @_;
 
 	$planner->add_delegate('copy_file', sub {
-		my (undef, $source, $destination) = @_;
+		my ($planner, $source, $destination) = @_;
 		my $copy = new_action('copy', $source, $destination);
 		$planner->create_node(
 			target       => $destination,
@@ -59,7 +59,7 @@ sub add_methods {
 	});
 
 	$planner->add_delegate('copy_executable', sub {
-		my (undef, $source, $destination) = @_;
+		my ($planner, $source, $destination) = @_;
 		my $copy = new_action('copy', $source, $destination);
 		my $make_executable = new_action('make_executable', $destination);
 		$planner->create_node(
@@ -70,7 +70,7 @@ sub add_methods {
 	});
 
 	$planner->add_delegate('manify', sub {
-		my (undef, $source, $destination, $section) = @_;
+		my ($planner, $source, $destination, $section) = @_;
 		my $manify = new_action('manify', $source, $destination, $section);
 		my $dirname = dirname($destination);
 		$planner->create_node(
@@ -81,7 +81,7 @@ sub add_methods {
 	});
 
 	$planner->add_delegate('mkdir', sub {
-		my (undef, $target, %options) = @_;
+		my ($planner, $target, %options) = @_;
 		my $action = ExtUtils::Builder::Action::Function->new(
 			function  => 'make_path',
 			module    => 'File::Path',
@@ -96,7 +96,7 @@ sub add_methods {
 	});
 
 	$planner->add_delegate('tap_harness', sub {
-		my (undef, $target, %options) = @_;
+		my ($planner, $target, %options) = @_;
 		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
@@ -108,7 +108,7 @@ sub add_methods {
 	});
 
 	$planner->add_delegate('install', sub {
-		my (undef, $target, %options) = @_;
+		my ($planner, $target, %options) = @_;
 		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
@@ -120,7 +120,7 @@ sub add_methods {
 	});
 
 	$planner->add_delegate('dump_binary', sub {
-		my (undef, $target, %options) = @_;
+		my ($planner, $target, %options) = @_;
 		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
@@ -131,7 +131,7 @@ sub add_methods {
 	});
 
 	$planner->add_delegate('dump_text', sub {
-		my (undef, $target, %options) = @_;
+		my ($planner, $target, %options) = @_;
 		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
@@ -142,7 +142,7 @@ sub add_methods {
 	});
 
 	$planner->add_delegate('dump_json', sub {
-		my (undef, $target, %options) = @_;
+		my ($planner, $target, %options) = @_;
 		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
