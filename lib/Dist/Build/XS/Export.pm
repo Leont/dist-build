@@ -49,7 +49,7 @@ sub add_methods {
 
 =head1 SYNOPSIS
 
- load_module('Dist::Build::Export');
+ load_module('Dist::Build::XS::Export');
  export_headers(
      module => 'Foo::Bar',
      dir    => 'include',
