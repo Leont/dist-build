@@ -40,8 +40,10 @@ sub add_methods {
 
 		$planner = $planner->new_scope;
 
-		$planner->load_module('ExtUtils::Builder::ParseXS',       0.016, config => $args{config}) unless $planner->can('parse_xs');
-		$planner->load_module('ExtUtils::Builder::AutoDetect::C', 0.016, config => $args{config}) unless $planner->can('compile');
+		my $config = $args{config} // $planner->config;
+
+		$planner->load_module('ExtUtils::Builder::ParseXS',       0.016, config => $config) unless $planner->can('parse_xs');
+		$planner->load_module('ExtUtils::Builder::AutoDetect::C', 0.016, config => $config) unless $planner->can('compile');
 
 		my $xs_dir = dirname($xs_file);
 		my $c_file = $planner->c_file_for_xs($xs_file, $xs_dir);
@@ -63,6 +65,7 @@ sub add_methods {
 			defines      => \%defines,
 			include_dirs => [ dirname($xs_file), @{ $args{include_dirs} // [] } ],
 			extra_args   => $compiler_flags,
+			config       => $config,
 		);
 
 		my @objects = $o_file;
@@ -80,6 +83,7 @@ sub add_methods {
 				defines      => \%defines,
 				include_dirs => \@include_dirs,
 				extra_args   => \@compiler_flags,
+				config       => $config,
 			);
 			push @objects, $object;
 		}
@@ -95,6 +99,7 @@ sub add_methods {
 			extra_args   => get_flags($args{extra_linker_flags}),
 			library_dirs => $args{library_dirs},
 			libraries    => $args{libraries},
+			config       => $config,
 		);
 
 		$planner->create_phony('dynamic', $lib_file);
