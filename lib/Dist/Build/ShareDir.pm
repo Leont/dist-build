@@ -13,7 +13,7 @@ sub add_methods {
 
 	$self->add_delegate($planner, 'dist_sharedir', sub {
 		my ($dir, $dist_name) = @_;
-		$dist_name ||= $planner->dist_name;
+		$dist_name //= $planner->dist_name;
 
 		my @outputs;
 		find(sub {

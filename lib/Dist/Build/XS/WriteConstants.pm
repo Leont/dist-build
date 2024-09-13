@@ -11,7 +11,7 @@ use parent 'ExtUtils::Builder::Planner::Extension';
 sub add_methods {
 	my ($self, $planner, %args) = @_;
 
-	my $parse_xs = $planner->can('parse_xs') || do {
+	my $parse_xs = $planner->can('parse_xs') // do {
 		$planner->load_module('ExtUtils::Builder::ParseXS', 0.016, config => $args{config});
 		$planner->can('parse_xs');
 	};

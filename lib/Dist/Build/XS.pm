@@ -24,7 +24,7 @@ sub add_methods {
 		my $pureperl_only = $args{pureperl_only} // $planner->pureperl_only;
 		die "Can't build xs files under --pureperl-only\n" if $pureperl_only;
 
-		my $xs_base = $args{xs_base} || 'lib';
+		my $xs_base = $args{xs_base} // 'lib';
 		my ($module_name, $xs_file);
 		if (defined $args{module}) {
 			$module_name = $args{module};
@@ -51,7 +51,7 @@ sub add_methods {
 		my $o_file = $planner->obj_file(basename($c_file, '.c'), $xs_dir);
 
 		my %defines = (
-			%{ $args{defines} || {} },
+			%{ $args{defines} // {} },
 			VERSION    => qq/"$module_version"/,
 			XS_VERSION => qq/"$module_version"/,
 		);
@@ -61,7 +61,7 @@ sub add_methods {
 			type         => 'loadable-object',
 			profile      => '@Perl',
 			defines      => \%defines,
-			include_dirs => [ dirname($xs_file), @{ $args{include_dirs} || [] } ],
+			include_dirs => [ dirname($xs_file), @{ $args{include_dirs} // [] } ],
 			extra_args   => $compiler_flags,
 		);
 
@@ -70,10 +70,10 @@ sub add_methods {
 		for my $source (@{ $args{extra_sources} }) {
 			my %options = ref $source ? %{ $source } : (source => $source);
 			my $dirname = dirname($options{source});
-			my $object  = $options{object} || $planner->obj_file(basename($options{source}, '.c'), $dirname);
-			my %defines = (%{ $args{defines} || {} }, %{ $options{defines} || {} });
-			my @include_dirs = (@{ $args{include_dirs} || [] }, @{ $options{include_dirs} || [] });
-			my @compiler_flags = (@{ $compiler_flags || [] }, @{ $options{flags} || [] });
+			my $object  = $options{object} // $planner->obj_file(basename($options{source}, '.c'), $dirname);
+			my %defines = (%{ $args{defines} // {} }, %{ $options{defines} // {} });
+			my @include_dirs = (@{ $args{include_dirs} // [] }, @{ $options{include_dirs} // [] });
+			my @compiler_flags = (@{ $compiler_flags // [] }, @{ $options{flags} // [] });
 			$planner->compile($options{source}, $object,
 				type         => 'loadable-object',
 				profile      => '@Perl',

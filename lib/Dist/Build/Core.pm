@@ -136,7 +136,7 @@ sub add_methods {
 			target       => $target,
 			dependencies => $options{dependencies},
 			actions      => [
-				new_action('dump_text', $target, $content, $options{encoding} || 'utf-8'),
+				new_action('dump_text', $target, $content, $options{encoding} // 'utf-8'),
 			]
 		);
 	});
