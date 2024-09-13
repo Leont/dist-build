@@ -204,3 +204,27 @@ Libraries to link to.
 Additional flags to feed to the compiler. This can either be an array or a (shell-quoted) string.
 
 =back
+
+=head1 EXTENSIONS
+
+Various extensions exist that modify the behavior of C<add_xs>. Among these are:
+
+=over 4
+
+=item * L<Dist::Build::XS::Import|Dist::Build::XS::Import>
+
+This adds an C<import> argument to imports include directories exported by other modules using L<Dist::Build::XS::Export|Dist::Build::XS::Export>.
+
+=item * L<Dist::Build::XS::WriteConstants|Dist::Build::XS::WriteConstants>
+
+This adds a C<write_constants> argument, integrating L<ExtUtils::Constant|ExtUtils::Constant>.
+
+=item * L<Dist::Build::XS::Alien|Dist::Build::XS::Alien>
+
+This adds an C<alien> argument to link to libraries using L<Alien::Base|Alien::Base>.
+
+=item * L<Dist::Build::XS::PkgConfig|Dist::Build::XS::PkgConfig>
+
+This adds a C<pkg_config> argument to link to libraries using C<pkg-config> files.
+
+=back
