@@ -42,8 +42,8 @@ sub add_methods {
  load_module('Dist::Build::XS::Import');
 
  add_xs(
-     module_name => "Foo::Bar",
-     import      => 'My::Dependency',
+     module => 'Foo::Bar',
+     import => 'My::Dependency',
  );
 
 =head1 DESCRIPTION
