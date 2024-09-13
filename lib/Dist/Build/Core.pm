@@ -6,7 +6,7 @@ use warnings;
 use parent 'ExtUtils::Builder::Planner::Extension';
 
 use Exporter 5.57 'import';
-our @EXPORT_OK = qw/copy make_executable manify tap_harness install/;
+our @EXPORT_OK = qw/copy make_executable manify tap_harness install dump_binary dump_text dump_json/;
 
 use Carp qw/croak/;
 use ExtUtils::Helpers 0.028 qw/make_executable man1_pagename man3_pagename/;
@@ -120,34 +120,34 @@ sub add_methods {
 	});
 
 	$planner->add_delegate('dump_binary', sub {
-		my ($planner, $target, %options) = @_;
+		my ($planner, $target, $content, %options) = @_;
 		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
 			actions      => [
-				new_action('dump_binary', $options{content}),
+				new_action('dump_binary', $target, $content),
 			]
 		);
 	});
 
 	$planner->add_delegate('dump_text', sub {
-		my ($planner, $target, %options) = @_;
+		my ($planner, $target, $content, %options) = @_;
 		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
 			actions      => [
-				new_action('dump_text', $options{content}, $options{encoding} || 'utf-8'),
+				new_action('dump_text', $target, $content, $options{encoding} || 'utf-8'),
 			]
 		);
 	});
 
 	$planner->add_delegate('dump_json', sub {
-		my ($planner, $target, %options) = @_;
+		my ($planner, $target, $content, %options) = @_;
 		$planner->create_node(
 			target       => $target,
 			dependencies => $options{dependencies},
 			actions      => [
-				new_action('dump_json', $options{content}),
+				new_action('dump_json', $target, $content),
 			]
 		);
 	});
@@ -390,15 +390,15 @@ This uninstalls files before installing the new ones.
 
 =back
 
-=item * dump_binary($filename, $content)
+=item * dump_binary($filename, $content, %named_arguments)
 
 Write C<$content> to C<$filename> as binary data.
 
-=item * dump_text($filename, $content, $encoding = 'utf8')
+=item * dump_text($filename, $content, %named_arguments)
 
 Write C<$content> to C<$filename> as text of the given encoding.
 
-=item * dump_json($filename, $content)
+=item * dump_json($filename, $content, %named_arguments)
 
 Write C<$content> to C<$filename> as JSON.
 
