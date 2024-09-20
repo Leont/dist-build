@@ -17,6 +17,7 @@ use Getopt::Long 2.36 qw/GetOptionsFromArray/;
 use Parse::CPAN::Meta;
 
 use ExtUtils::Builder::Planner 0.008;
+use ExtUtils::Builder::Util 'get_perl';
 use Dist::Build::Serializer;
 
 my $json_backend = Parse::CPAN::Meta->json_backend;
@@ -83,7 +84,7 @@ sub Build_PL {
 	(my $main_module = $meta->name) =~ s/-/::/g;
 	$planner->add_delegate('main_module', sub { $main_module });
 	$planner->add_delegate('release_status', sub { $meta->release_status });
-	$planner->add_delegate('perl_path', sub { get_perl(%options) });
+	$planner->add_delegate('perl_path', sub { get_perl(config => $options{config}, %options) });
 
 	for my $variable (qw/config install_paths verbose uninst jobs pureperl_only/) {
 		$planner->add_delegate($variable, sub { $options{$variable} });
