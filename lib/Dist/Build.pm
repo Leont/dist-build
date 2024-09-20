@@ -81,7 +81,7 @@ sub Build_PL {
 	$planner->add_delegate('dist_name', sub { $meta->name });
 	$planner->add_delegate('dist_version', sub { $meta->version });
 	(my $main_module = $meta->name) =~ s/-/::/g;
-	$planner->add_delegate('main_module_name', sub { $main_module });
+	$planner->add_delegate('main_module', sub { $main_module });
 	$planner->add_delegate('release_status', sub { $meta->release_status });
 	$planner->add_delegate('perl_path', sub { get_perl(%options) });
 

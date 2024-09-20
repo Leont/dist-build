@@ -23,7 +23,7 @@ sub add_methods {
 		if (my $write_constants = delete $args{write_constants}) {
 			my $xs_dir = dirname($xs_file);
 			my $basename = delete $write_constants->{CONST_BASENAME} // 'const';
-			$write_constants->{NAME}    //= $args{module_name} // $planner->main_module_name;
+			$write_constants->{NAME}    //= $args{module_name} // $planner->main_module;
 			$write_constants->{C_FILE}  //= catfile($xs_dir, "$basename-c.inc");
 			$write_constants->{XS_FILE} //= catfile($xs_dir, "$basename-xs.inc");
 

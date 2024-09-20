@@ -1,6 +1,7 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+          - Rename main_module_name to main_module
 
 0.015     2024-09-20 14:07:03+02:00 Europe/Brussels
           - Add Dist::Build::XS::Alien

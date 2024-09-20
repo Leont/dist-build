@@ -30,7 +30,7 @@ sub add_methods {
 
 	$planner->add_delegate('export_headers', sub {
 		my ($self, %args) = @_;
-		my $module_name = $args{module} // $planner->main_module_name;
+		my $module_name = $args{module} // $planner->main_module;
 		(my $module_dir = $module_name) =~ s/::/-/g;
 		croak 'No directory or file given to share' if not $args{dir} and not $args{file};
 
@@ -53,7 +53,7 @@ sub add_methods {
 		my ($self, %args) = @_;
 		my %flags = map { $_ => $args{$_} } grep { $allowed_flag{$_} } keys %args;
 
-		my $module_name = $args{module} // $planner->main_module_name;
+		my $module_name = $args{module} // $planner->main_module;
 		(my $module_dir = $module_name) =~ s/::/-/g;
 		my $filename = catfile(qw/blib lib auto share module/, $module_dir, 'compile.json');
 
