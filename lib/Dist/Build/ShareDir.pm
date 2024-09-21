@@ -11,8 +11,8 @@ use File::Spec::Functions qw/abs2rel catfile/;
 sub add_methods {
 	my ($self, $planner) = @_;
 
-	$self->add_delegate($planner, 'dist_sharedir', sub {
-		my ($dir, $dist_name) = @_;
+	$planner->add_delegate('dist_sharedir', sub {
+		my ($planner, $dir, $dist_name) = @_;
 		$dist_name //= $planner->dist_name;
 
 		my @outputs;
@@ -23,15 +23,12 @@ sub add_methods {
 			push @outputs, $output;
 		}, $dir);
 
-		ExtUtils::Builder::Node->new(
-			target       => 'code',
-			dependencies => \@outputs,
-			phony        => 1,
-		);
+		$planner->create_phony('code', @outputs);
 	});
 
-	$self->add_delegate($planner, 'module_sharedir', sub {
-		my ($dir, $module_name) = @_;
+	$planner->add_delegate('module_sharedir', sub {
+		my ($planner, $dir, $module_name) = @_;
+		$module_name //= $planner->main_module;
 		(my $module_dir = $module_name) =~ s/::/-/g;
 
 		my @outputs;
@@ -42,11 +39,7 @@ sub add_methods {
 			push @outputs, $output;
 		}, $dir);
 
-		ExtUtils::Builder::Node->new(
-			target       => 'code',
-			dependencies => \@outputs,
-			phony        => 1,
-		);
+		$planner->create_phony('code', @outputs);
 	});
 }
 
@@ -70,4 +63,4 @@ This marks C<$dir> as the source sharedir for the distribution C<$dist_name>. If
 
 =head2 module_sharedir($dir, $module_name)
 
-This marks C<$dir> as the source sharedir for the module C<$module_name>.
+This marks C<$dir> as the source sharedir for the module C<$module_name>. If C<$module_name> isn't given, it defaults to the C<main_module> of the planner.
