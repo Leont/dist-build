@@ -79,8 +79,8 @@ sub Build_PL {
 	$planner->install('install', dependencies => [ 'pure_all' ], install_map => $options{install_paths}->install_map);
 
 	$planner->add_delegate('meta', sub { $meta });
-	$planner->add_delegate('dist_name', sub { $meta->name });
-	$planner->add_delegate('dist_version', sub { $meta->version });
+	$planner->add_delegate('distribution', sub { $meta->name });
+	$planner->add_delegate('distribution_version', sub { $meta->version });
 	(my $main_module = $meta->name) =~ s/-/::/g;
 	$planner->add_delegate('main_module', sub { $main_module });
 	$planner->add_delegate('release_status', sub { $meta->release_status });

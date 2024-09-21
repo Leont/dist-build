@@ -13,7 +13,7 @@ sub add_methods {
 
 	$planner->add_delegate('dist_sharedir', sub {
 		my ($planner, $dir, $dist_name) = @_;
-		$dist_name //= $planner->dist_name;
+		$dist_name //= $planner->distribution;
 
 		my @outputs;
 		find(sub {
@@ -57,9 +57,9 @@ sub add_methods {
 
 This Dist::Build extension implements sharedirs. It does not take any arguments at loading time, and exposts two functions to the planner:
 
-=head2 dist_sharedir($dir, $dist_name)
+=head2 dist_sharedir($dir, $distribution)
 
-This marks C<$dir> as the source sharedir for the distribution C<$dist_name>. If C<$dist_name> isn't given, it defaults to the C<dist_name> of the planner.
+This marks C<$dir> as the source sharedir for the distribution C<$distribution>. If C<$distribution> isn't given, it defaults to the C<distribution> of the planner.
 
 =head2 module_sharedir($dir, $module_name)
 
