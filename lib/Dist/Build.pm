@@ -64,19 +64,12 @@ sub Build_PL {
 	my %options = get_config($meta->name, [ @{$args} ], [ @env ]);
 
 	my $planner = ExtUtils::Builder::Planner->new;
-	$planner->load_module('Dist::Build::Core');
 
-	my @blibs = map { catfile('blib', $_) } qw/lib arch bindoc libdoc script bin/;
-	$planner->mkdir($_) for @blibs;
-	$planner->create_phony('config', @blibs);
 	$planner->create_phony('code', 'config');
 	$planner->create_phony('manify', 'config');
 	$planner->create_phony('dynamic');
 	$planner->create_phony('pure_all', 'code', 'manify', 'dynamic');
 	$planner->create_phony('build', 'pure_all');
-
-	$planner->tap_harness('test', dependencies => [ 'pure_all' ], test_dir => 't');
-	$planner->install('install', dependencies => [ 'pure_all' ], install_map => $options{install_paths}->install_map);
 
 	$planner->add_delegate('meta', sub { $meta });
 	$planner->add_delegate('distribution', sub { $meta->name });
@@ -102,8 +95,17 @@ sub Build_PL {
 		push @meta_fragments, @fragments;
 	});
 
-	$planner->lib_dir('lib');
-	$planner->script_dir('script');
+	my $core = $planner->new_scope;
+	$core->load_module('Dist::Build::Core');
+
+	my @blibs = map { catfile('blib', $_) } qw/lib arch bindoc libdoc script bin/;
+	$core->mkdir($_) for @blibs;
+	$core->create_phony('config', @blibs);
+	$core->lib_dir('lib');
+	$core->script_dir('script');
+
+	$core->tap_harness('test', dependencies => [ 'pure_all' ], test_dir => 't');
+	$core->install('install', dependencies => [ 'pure_all' ], install_map => $options{install_paths}->install_map);
 
 	for my $file (glob 'planner/*.pl') {
 		my $inner = $planner->new_scope;
@@ -112,7 +114,7 @@ sub Build_PL {
 		$inner->run_dsl($file);
 	}
 
-	$planner->autoclean;
+	$core->autoclean;
 
 	my $plan = $planner->materialize;
 
