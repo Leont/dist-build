@@ -96,6 +96,12 @@ sub Build_PL {
 		return $inner;
 	});
 
+	my @meta_fragments;
+	$planner->add_delegate('add_meta', sub {
+		my (undef, @fragments) = @_;
+		push @meta_fragments, @fragments;
+	});
+
 	$planner->lib_dir('lib');
 	$planner->script_dir('script');
 
@@ -114,13 +120,12 @@ sub Build_PL {
 	save_json(catfile(qw/_build graph/), $serializer->serialize_plan($plan));
 	save_json(catfile(qw/_build params/), [ $args, \@env ]);
 
-	if (my $dynamic = $meta->custom('x_dynamic_prereqs')) {
-		my %meta = (%{ $meta->as_struct }, dynamic_config => 0);
-		require CPAN::Requirements::Dynamic;
-		my $dynamic_parser = CPAN::Requirements::Dynamic->new(%options, prereqs => $meta->effective_prereqs);
-		my $prereq = $dynamic_parser->evaluate($dynamic);
-		$meta{prereqs} = $prereq->as_string_hash;
-		$meta = CPAN::Meta->new(\%meta);
+	if (@meta_fragments) {
+		require CPAN::Meta::Merge;
+		my $merger = CPAN::Meta::Merge->new(default_version => '2');
+		my $metahash = $merger->merge($meta, @meta_fragments);
+		$metahash->{dynamic_config} = 0;
+		$meta = CPAN::Meta->create($metahash, { lazy_validation => 0 });
 	}
 	$meta->save('MYMETA.json');
 
@@ -168,5 +173,3 @@ C<Dist::Build> is a Build.PL implementation. Unlike L<Module::Build::Tiny> it is
    libraries     => [ 'foo' ],
    extra_sources => [ glob 'src/*.c' ],
  );
-
- At configure time, it will run a L<dynamic-prereqs.json|CPAN::Requirements::Dynamic> file if present to determine the conditional dependencies
