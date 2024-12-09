@@ -58,9 +58,9 @@ sub add_methods {
 
  add_xs(
      module          => 'Foo::Bar',
-	 write_constants => {
-		NAMES => [ qw/FOO BAR BAZ/ ],
-	 },
+     write_constants => {
+         NAMES => [ qw/FOO BAR BAZ/ ],
+     },
  );
 
 =head1 DESCRIPTION
@@ -69,7 +69,7 @@ This module is an extension of L<Dist::Build::XS|Dist::Build::XS>, adding an add
 
   {
     NAME    => 'Foo::Bar',
-    NAMES   => [ 'FOO' ],
+    NAMES   => [ qw/FOO BAR BAZ/ ],
     C_FILE  => 'lib/Foo/const-c.inc',
     XS_FILE => 'lib/Foo/const-xs.inc',
   }
