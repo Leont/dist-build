@@ -173,3 +173,59 @@ C<Dist::Build> is a Build.PL implementation. Unlike L<Module::Build::Tiny> it is
    libraries     => [ 'foo' ],
    extra_sources => [ glob 'src/*.c' ],
  );
+
+=head1 DELEGATES
+
+By default, the following delegates are defined on your L<planner|ExtUtils::Builder::Planner>:
+
+=over 4
+
+=item * meta
+
+A L<CPAN::Meta|CPAN::Meta> object representing the C<META.json> file.
+
+=item * distribution
+
+The name of the distribution
+
+=item * distribution_version
+
+The version of the distribution
+
+=item * main_module
+
+The main module of the distribution.
+
+=item * release_status
+
+The release status of the distribution (e.g. C<'stable'>).
+
+=item * perl_path
+
+The path to the perl executable.
+
+=item * config
+
+The L<ExtUtils::Config|ExtUtils::Config> object for this build
+
+=item * install_paths
+
+The L<ExtUtils::InstallPaths|ExtUtils::InstallPaths> object for this build.
+
+=item * verbose
+
+The value of the C<verbose> command line argument.
+
+=item * uninst
+
+The value of the C<uninst> command line argument.
+
+=item * jobs
+
+The value of the C<jobs> command line argument.
+
+=item * pureperl_only
+
+The value of the C<pureperl_only> command line argument.
+
+=back
