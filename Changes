@@ -2,7 +2,7 @@ Revision history for Dist-Build
 
 {{$NEXT}}
           - Don't expose Dist::Build::Core to main planner
-          - Document core delegates
+          - Document core delegates and known plugins
 
 0.016     2024-10-06 18:04:02+02:00 Europe/Brussels
           - Add Dist::Build::DynamicPrereqs

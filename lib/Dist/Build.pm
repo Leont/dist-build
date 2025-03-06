@@ -158,11 +158,6 @@ sub Build {
 
 # ABSTRACT: A modern module builder, author tools not included!
 
-=head1 SYNOPSIS
-
- use Dist::Build;
- Build_PL(\@ARGV, \%ENV);
-
 =head1 DESCRIPTION
 
 C<Dist::Build> is a Build.PL implementation. Unlike L<Module::Build::Tiny> it is extensible, unlike L<Module::Build> it uses a build graph internally which makes it easy to combine different customizations. It's typically extended by adding a C<.pl> script in C<planner/>. E.g.
@@ -171,10 +166,61 @@ C<Dist::Build> is a Build.PL implementation. Unlike L<Module::Build::Tiny> it is
  dist_sharedir('share', 'Foo-Bar');
  
  load_module("Dist::Build::XS");
+ load_module("Dist::Build::XS::Alien");
  add_xs(
-   libraries     => [ 'foo' ],
+   alien         => 'foo',
    extra_sources => [ glob 'src/*.c' ],
  );
+
+=head1 PLUGINS
+
+=over 4
+
+=item * L<Dist::Build::XS>
+
+This plugin enables one to compile XS modules. It has a range of options, and a series of extensions that add to its capabilities.
+
+=over 4
+
+=item * L<Dist::Build::XS::Alien>
+
+This is used to link to an L<Alien|Alien::Base> library.
+
+=item * L<Dist::Build::XS::Conf>
+
+This wraps L<ExtUtils::Builder::Conf|ExtUtils::Builder::Conf> to detect headers, libraries and features.
+
+=item * L<Dist::Build::XS::Import>
+
+This can be used to import headers and flags as exported by L<Dist::Build::XS::Export|Dist::Build::XS::Export>.
+
+=item * L<Dist::Build::XS::PkgConfig>
+
+This adds flags for a given library as configured in its pkgconfig file.
+
+=item * L<Dist::Build::XS::WriteConstants>
+
+This integrates L<ExtUtils::Constant|ExtUtils::Constant> into the C<add_xs> command.
+
+=back
+
+=item * L<Dist::Build::ShareDir>
+
+This allows one to install sharedirs
+
+=item * L<Dist::Build::XS::Export>
+
+This allows one to export headers and flags, to be imported by L<Dist::Build::XS::Import|Dist::Build::XS::Import>
+
+=item * L<Dist::Build::DynamicPrereqs>
+
+This allows one to dynamically evaluate dependencies.
+
+=item * L<Dist::Build::Core>
+
+This module contains all commands used for the base actions of the module.
+
+=back
 
 =head1 DELEGATES
 
