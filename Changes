@@ -1,6 +1,8 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+
+0.017     2025-03-11 21:53:17+01:00 Europe/Brussels
           - Don't expose Dist::Build::Core to main planner
           - Document core delegates and known plugins
 
