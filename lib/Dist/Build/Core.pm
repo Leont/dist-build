@@ -56,6 +56,7 @@ sub add_methods {
 			dependencies => [ $source ],
 			actions      => [ $copy ],
 		);
+		return $destination;
 	});
 
 	$planner->add_delegate('copy_executable', sub {
@@ -67,6 +68,7 @@ sub add_methods {
 			dependencies => [ $source ],
 			actions      => [ $copy, $make_executable ],
 		);
+		return $destination;
 	});
 
 	$planner->add_delegate('manify', sub {
@@ -78,6 +80,7 @@ sub add_methods {
 			dependencies => [ $source, $dirname ],
 			actions      => [ $manify ],
 		);
+		return $destination;
 	});
 
 	$planner->add_delegate('mkdir', sub {
@@ -93,6 +96,7 @@ sub add_methods {
 			target  => $target,
 			actions => [ $action ],
 		);
+		return $target;
 	});
 
 	$planner->add_delegate('tap_harness', sub {
@@ -105,6 +109,7 @@ sub add_methods {
 				new_action('tap_harness', test_dir => $options{test_dir} ),
 			],
 		);
+		return $target;
 	});
 
 	$planner->add_delegate('install', sub {
@@ -117,6 +122,7 @@ sub add_methods {
 				new_action('install', install_map => $options{install_map}),
 			]
 		);
+		return $target;
 	});
 
 	$planner->add_delegate('dump_binary', sub {

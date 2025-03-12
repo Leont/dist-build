@@ -20,9 +20,7 @@ sub copy_header {
 	my ($planner, $module_dir, $filename, $target) = @_;
 
 	my $output = catfile(qw/blib lib auto share module/, $module_dir, 'include', $target);
-	$planner->copy_file(abs2rel($filename), $output);
-
-	return $output;
+	return $planner->copy_file(abs2rel($filename), $output);
 }
 
 sub add_methods {

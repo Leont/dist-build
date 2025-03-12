@@ -103,6 +103,8 @@ sub add_methods {
 		);
 
 		$planner->create_phony('dynamic', $lib_file);
+
+		return $lib_file;
 	});
 }
 
