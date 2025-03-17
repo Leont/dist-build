@@ -1,6 +1,8 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+
+0.018     2025-03-17 11:58:21+01:00 Europe/Brussels
           - Add auto_xs to Dist::Build::XS
           - Use filesets to find files
           - Make various delegates return their target
