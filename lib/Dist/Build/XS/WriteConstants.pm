@@ -12,7 +12,7 @@ sub add_methods {
 	my ($self, $planner, %args) = @_;
 
 	my $parse_xs = $planner->can('parse_xs') // do {
-		$planner->load_module('ExtUtils::Builder::ParseXS', 0.016, config => $args{config});
+		$planner->load_extension('ExtUtils::Builder::ParseXS', 0.016, config => $args{config});
 		$planner->can('parse_xs');
 	};
 
@@ -53,8 +53,8 @@ sub add_methods {
 
 =head1 SYNOPSIS
 
- load_module('Dist::Build::XS');
- load_module('Dist::Build::XS::WriteConstants');
+ load_extension('Dist::Build::XS');
+ load_extension('Dist::Build::XS::WriteConstants');
 
  add_xs(
      module          => 'Foo::Bar',

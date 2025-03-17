@@ -16,7 +16,7 @@ use File::Spec::Functions qw/catfile catdir abs2rel /;
 use Getopt::Long 2.36 qw/GetOptionsFromArray/;
 use Parse::CPAN::Meta;
 
-use ExtUtils::Builder::Planner 0.015;
+use ExtUtils::Builder::Planner 0.016;
 use ExtUtils::Builder::Util qw/get_perl unix_to_native_path/;
 use Dist::Build::Serializer;
 
@@ -96,7 +96,7 @@ sub Build_PL {
 	});
 
 	my $core = $planner->new_scope;
-	$core->load_module('Dist::Build::Core');
+	$core->load_extension('Dist::Build::Core');
 
 	my @blibs = map { catfile('blib', $_) } qw/lib arch bindoc libdoc script bin/;
 	$core->mkdir($_) for @blibs;
@@ -163,11 +163,11 @@ sub Build {
 
 C<Dist::Build> is a Build.PL implementation. Unlike L<Module::Build::Tiny> it is extensible, unlike L<Module::Build> it uses a build graph internally which makes it easy to combine different customizations. It's typically extended by adding a C<.pl> script in C<planner/>. E.g.
 
- load_module("Dist::Build::ShareDir");
+ load_extension("Dist::Build::ShareDir");
  dist_sharedir('share', 'Foo-Bar');
  
- load_module("Dist::Build::XS");
- load_module("Dist::Build::XS::Alien");
+ load_extension("Dist::Build::XS");
+ load_extension("Dist::Build::XS::Alien");
  add_xs(
    alien         => 'foo',
    extra_sources => [ glob 'src/*.c' ],

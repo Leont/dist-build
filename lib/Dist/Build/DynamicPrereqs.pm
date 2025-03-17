@@ -40,7 +40,7 @@ sub add_methods {
 
 =head1 SYNOPSIS
 
- load_module("Dist::Build::DynamicPrereqs");
+ load_extension("Dist::Build::DynamicPrereqs");
  evaluate_dynamic_prereqs();
 
 =head1 DESCRIPTION

@@ -35,7 +35,7 @@ sub add_methods {
 		my $dir = unix_to_native_path($args{dir});
 
 		my $inner = $planner->new_scope;
-		$inner->load_module('Dist::Build::Core');
+		$inner->load_extension('Dist::Build::Core');
 
 		$inner->create_subst(
 			on     => $inner->create_pattern(dir => $dir),
@@ -62,7 +62,7 @@ sub add_methods {
 		my $filename = catfile(qw/blib lib auto share module/, $module_dir, 'compile.json');
 
 		my $inner = $planner->new_scope;
-		$inner->load_module('Dist::Build::Core');
+		$inner->load_extension('Dist::Build::Core');
 		$inner->dump_json($filename, \%flags);
 
 		return $planner->create_phony('code', $filename);
@@ -75,7 +75,7 @@ sub add_methods {
 
 =head1 SYNOPSIS
 
- load_module('Dist::Build::XS::Export');
+ load_extension('Dist::Build::XS::Export');
  export_headers(
      module => 'Foo::Bar',
      dir    => 'include',

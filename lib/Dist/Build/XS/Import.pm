@@ -59,8 +59,8 @@ sub add_methods {
 
 =head1 SYNOPSIS
 
- load_module('Dist::Build::XS');
- load_module('Dist::Build::XS::Import');
+ load_extension('Dist::Build::XS');
+ load_extension('Dist::Build::XS::Import');
 
  add_xs(
      module => 'Foo::Bar',

@@ -28,8 +28,8 @@ sub add_methods {
 
 		my $config = $args{config} // $planner->config;
 
-		$planner->load_module('ExtUtils::Builder::ParseXS',       0.016, config => $config) unless $planner->can('parse_xs');
-		$planner->load_module('ExtUtils::Builder::AutoDetect::C', 0.016, config => $config) unless $planner->can('compile');
+		$planner->load_extension('ExtUtils::Builder::ParseXS',       0.016, config => $config) unless $planner->can('parse_xs');
+		$planner->load_extension('ExtUtils::Builder::AutoDetect::C', 0.016, config => $config) unless $planner->can('compile');
 
 		my $xs_base = $args{xs_base} // 'lib';
 		my ($module_name, $xs_file);
@@ -139,7 +139,7 @@ sub add_methods {
 
  # planner/xs.pl
 
- load_module('Dist::Build::XS');
+ load_extension('Dist::Build::XS');
  add_xs(
    module        => 'Foo::Bar',
    extra_sources => [ glob 'src/*.c' ],

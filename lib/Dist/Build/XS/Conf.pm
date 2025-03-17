@@ -10,7 +10,7 @@ sub add_methods {
 
 	my $add_xs = $planner->can('add_xs') or die "XS must be loaded before imports can be done";
 
-	$planner->load_module('ExtUtils::Builder::Conf');
+	$planner->load_extension('ExtUtils::Builder::Conf');
 
 	$planner->add_delegate('add_xs', sub {
 		my ($planner, %args) = @_;
@@ -32,7 +32,7 @@ sub add_methods {
 
 =head1 SYNOPSIS
 
- load_module("Dist::Build::XS");
+ load_extension("Dist::Build::XS");
  
  find_libs_for(source => <<'EOF', libs => [ ['socket'], ['moonlaser'] ]);
  #include <stdio.h>

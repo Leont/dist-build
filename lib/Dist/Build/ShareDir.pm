@@ -18,7 +18,7 @@ sub add_methods {
 		$dir = unix_to_native_path($dir);
 
 		my $inner = $planner->new_scope;
-		$inner->load_module("Dist::Build::Core");
+		$inner->load_extension("Dist::Build::Core");
 
 		my $outputs = $inner->create_subst(
 			on     => $inner->create_pattern(dir => $dir),
@@ -38,7 +38,7 @@ sub add_methods {
 		$dir = unix_to_native_path($dir);
 
 		my $inner = $planner->new_scope;
-		$inner->load_module("Dist::Build::Core");
+		$inner->load_extension("Dist::Build::Core");
 
 		my $outputs = $inner->create_subst(
 			on     => $inner->create_pattern(dir => $dir),
@@ -58,7 +58,7 @@ sub add_methods {
 
 =head1 SYNOPSIS
 
- load_module("Dist::Build::ShareDir");
+ load_extension("Dist::Build::ShareDir");
  dist_sharedir('share', 'Foo-Bar');
  module_sharedir('foo', 'Foo::Bar');
 
