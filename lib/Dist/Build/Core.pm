@@ -294,6 +294,7 @@ sub copy {
 	my ($source, $target, %options) = @_;
 
 	make_path(dirname($target));
+	unlink $target if -f $target;
 	File::Copy::copy($source, $target) or croak "Could not copy: $!";
 
 	my ($atime, $mtime) = (stat $source)[8,9];
