@@ -83,6 +83,16 @@ sub Build_PL {
 		$planner->add_delegate($variable, sub { $options{$variable} });
 	}
 
+	$planner->add_delegate('is_os', sub {
+			my ($self, @wanted) = @_;
+			return not not grep { $_ eq $^O } @wanted
+	});
+	$planner->add_delegate('is_os_type', sub {
+			my ($self, $wanted) = @_;
+			require Perl::OSType;
+			return Perl::OSType::is_os_type($wanted);
+	});
+
 	$planner->add_delegate('new_planner', sub {
 		my $inner = ExtUtils::Builder::Planner->new;
 		$inner->add_delegate('config', sub { $options{config} });
@@ -260,6 +270,14 @@ The L<ExtUtils::Config|ExtUtils::Config> object for this build
 =item * install_paths
 
 The L<ExtUtils::InstallPaths|ExtUtils::InstallPaths> object for this build.
+
+=item * is_os(@os_names)
+
+This returns true if the current operating system matches any of the listed ones.
+
+=item * is_os_type($os_type)
+
+This returns true if the type of the OS matches C<$os_type>. Legal values are C<Unix>, C<Windows> and C<VMS>.
 
 =item * verbose
 
