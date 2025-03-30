@@ -32,17 +32,16 @@ sub add_methods {
 		my $module_name = $args{module} // $planner->main_module;
 		(my $module_dir = $module_name) =~ s/::/-/g;
 		croak 'No directory or file given to share' if not $args{dir} and not $args{file};
-		my $dir = unix_to_native_path($args{dir});
 
 		my $inner = $planner->new_scope;
 		$inner->load_extension('Dist::Build::Core');
 
 		$inner->create_subst(
-			on     => $inner->create_pattern(dir => $dir),
+			on     => $inner->create_pattern(dir => $args{dir}),
 			add_to => 'code',
 			subst  => sub {
 				my ($source) = @_;
-				my $target = abs2rel($source, $dir);
+				my $target = abs2rel($source, $args{dir});
 				return copy_header($inner, $module_dir, $source, $target);
 			},
 		);

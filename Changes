@@ -2,6 +2,7 @@ Revision history for Dist-Build
 
 {{$NEXT}}
           - Adapt to load_extension
+          - Normalize sharedir paths in create_pattern
 
 0.018     2025-03-17 11:58:21+01:00 Europe/Brussels
           - Add auto_xs to Dist::Build::XS
