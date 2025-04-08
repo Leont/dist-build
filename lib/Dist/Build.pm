@@ -15,6 +15,7 @@ use ExtUtils::InstallPaths;
 use File::Spec::Functions qw/catfile catdir abs2rel /;
 use Getopt::Long 2.36 qw/GetOptionsFromArray/;
 use Parse::CPAN::Meta;
+use version ();
 
 use ExtUtils::Builder::Planner 0.016;
 use ExtUtils::Builder::Util qw/get_perl unix_to_native_path/;
@@ -73,7 +74,7 @@ sub Build_PL {
 
 	$planner->add_delegate('meta', sub { $meta });
 	$planner->add_delegate('distribution', sub { $meta->name });
-	$planner->add_delegate('distribution_version', sub { $meta->version });
+	$planner->add_delegate('version', sub { version->new($meta->version) });
 	(my $main_module = $meta->name) =~ s/-/::/g;
 	$planner->add_delegate('main_module', sub { $main_module });
 	$planner->add_delegate('release_status', sub { $meta->release_status });
@@ -247,7 +248,7 @@ A L<CPAN::Meta|CPAN::Meta> object representing the C<META.json> file.
 
 The name of the distribution
 
-=item * distribution_version
+=item * version
 
 The version of the distribution
 

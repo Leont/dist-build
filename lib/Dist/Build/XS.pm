@@ -43,7 +43,7 @@ sub add_methods {
 			$module_name = $planner->main_module;
 			$xs_file = catfile($xs_base, split /::/, $module_name) . '.xs';
 		}
-		my $module_version = $args{version} // $planner->distribution_version;
+		my $module_version = $args{version} // $planner->version;
 
 		my $xs_dir = dirname($xs_file);
 		my $c_file = $planner->c_file_for_xs($xs_file, $xs_dir);
