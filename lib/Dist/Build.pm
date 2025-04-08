@@ -120,10 +120,7 @@ sub Build_PL {
 	$core->install('install', dependencies => [ 'pure_all' ], install_map => $options{install_paths}->install_map);
 
 	for my $file (glob 'planner/*.pl') {
-		my $inner = $planner->new_scope;
-		$inner->add_delegate('self', sub { $inner });
-		$inner->add_delegate('outer', sub { $planner });
-		$inner->run_dsl($file);
+		$planner->new_scope->run_dsl($file);
 	}
 
 	$core->autoclean;
