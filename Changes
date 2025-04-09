@@ -1,6 +1,8 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+
+0.019     2025-04-09 23:20:58+02:00 Europe/Brussels
           - Adapt to load_extension
           - Normalize sharedir paths in create_pattern
           - Add is_os and is_os_type delegates
