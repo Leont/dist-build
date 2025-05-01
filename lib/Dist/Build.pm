@@ -113,7 +113,6 @@ sub Build_PL {
 	$core->mkdir($_) for @blibs;
 	$core->create_phony('config', @blibs);
 	$core->lib_dir('lib');
-	$core->script_dir('script');
 	$core->add_seen(unix_to_native_path($_)) for sort keys %{ maniread() };
 
 	$core->tap_harness('test', dependencies => [ 'pure_all' ], test_dir => 't');
