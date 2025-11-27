@@ -16,7 +16,7 @@ sub add_methods {
 	$planner->add_delegate('add_xs', sub {
 		my ($planner, %args) = @_;
 
-		if (my $alien = delete $args{alien}) {
+		if (my $alien = delete $args{alien} // delete $args{external}) {
 			my @aliens = ref $alien ? @{ $alien } : $alien;
 
 			for my $alien (@aliens) {
@@ -70,4 +70,4 @@ sub add_methods {
 
 =head1 DESCRIPTION
 
-This module is an extension of L<Dist::Build::XS|Dist::Build::XS>, adding an additional argument to the C<add_xs> function: C<alien>. It will add the appropriate arguments for that alien module to the build. It can be either a string or a list of strings. If the strings don't contain C<::> they're prepended with C<'Alien::'> before the module is loaded.
+This module is an extension of L<Dist::Build::XS|Dist::Build::XS>, adding an additional argument to the C<add_xs> function: C<alien> (or alternatively C<external>). It will add the appropriate arguments for that alien module to the build. It can be either a string or a list of strings. If the strings don't contain C<::> they're prepended with C<'Alien::'> before the module is loaded.
