@@ -6,8 +6,7 @@ use warnings;
 use parent 'ExtUtils::Builder::Planner::Extension';
 
 use Carp 'croak';
-use ExtUtils::Builder::Util 'require_module';
-use ExtUtils::Helpers 'split_like_shell';
+use ExtUtils::Builder::Util 0.018 qw/require_module split_like_shell/;
 
 sub add_methods {
 	my ($self, $planner, %args) = @_;
