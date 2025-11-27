@@ -33,6 +33,7 @@ sub add_methods {
 =head1 SYNOPSIS
 
  load_extension("Dist::Build::XS");
+ load_extension("Dist::Build::XS::Conf");
  
  find_libs_for(source => <<'EOF', libs => [ ['socket'], ['moonlaser'] ]);
  #include <stdio.h>
