@@ -7,7 +7,7 @@ use parent 'ExtUtils::Builder::Planner::Extension';
 
 use Carp 'croak';
 use File::Spec::Functions qw/catfile catdir/;
-use File::ShareDir::Tiny 'module_dir';
+use Dist::Build::Util 'module_dir';
 use Parse::CPAN::Meta;
 
 my $json_backend = Parse::CPAN::Meta->json_backend;
