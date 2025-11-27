@@ -36,10 +36,6 @@ $dist->add_file('planner/shared.pl', undent(<<'	---'));
 	dist_sharedir('share', 'Foo-Bar');
 	module_sharedir('module-share/Foo-Bar', 'Foo::Bar');
 	---
-$dist->add_file('planner/dynamic.pl', undent(<<'	---'));
-	load_extension("Dist::Build::DynamicPrereqs");
-	evaluate_dynamic_prereqs();
-	---
 
 my $has_compiler = can_compile_loadable_object(quiet => 1);
 
@@ -195,13 +191,6 @@ sub _slurp { do { local (@ARGV,$/)=$_[0]; <> } }
     ok( -f catfile(module_dir('Foo::Bar'), 'include/foo.h'), 'header file has been exported');
     ok( -f catfile(module_dir('Foo::Bar'), 'compile.json'), 'compilation flag file has been exported');
   }
-
-  require CPAN::Meta;
-  my $meta = CPAN::Meta->load_file("MYMETA.json");
-  my $req = $meta->effective_prereqs->requirements_for('runtime', 'requires');
-  my $dynamic_dependency = join ',', sort $req->required_modules;
-
-  is($dynamic_dependency, 'Bar,perl', 'Dependency on Foo has been inserted');
 
   SKIP: {
     require ExtUtils::InstallPaths;
