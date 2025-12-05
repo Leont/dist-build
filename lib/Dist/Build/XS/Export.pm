@@ -44,7 +44,7 @@ sub add_methods {
 				my $target = abs2rel($source, $args{dir});
 				return copy_header($inner, $module_dir, $source, $target);
 			},
-		);
+		) if $args{dir};
 
 		my @files = ref $args{file} ? @{ $args{file} } : defined $args{file} ? $args{file} : ();
 		for my $file (@files) {

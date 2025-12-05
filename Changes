@@ -2,6 +2,7 @@ Revision history for Dist-Build
 
 {{$NEXT}}
           - Add support for importing and exporting typemaps
+          - Only export dir if dir is defined
 
 0.022     2025-11-27 23:07:13+01:00 Europe/Brussels
           - Move Dist::Build::DynamicPrereqs to a separate dist
