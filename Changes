@@ -4,6 +4,7 @@ Revision history for Dist-Build
           - Add support for importing and exporting typemaps
           - Only export dir if dir is defined
           - Remove use of ExtUtils::HasCompiler from test
+          - Always pass typemaps as absolute paths
 
 0.022     2025-11-27 23:07:13+01:00 Europe/Brussels
           - Move Dist::Build::DynamicPrereqs to a separate dist

@@ -48,6 +48,12 @@ sub add_methods {
 		my $xs_dir = dirname($xs_file);
 		my $c_file = $planner->c_file_for_xs($xs_file, $xs_dir);
 
+		if (my $typemap = $args{typemap}) {
+			my @typemaps = ref $args{typemap} ? @{ $typemap } : $typemap;
+			$_ = rel2abs($_) for @typemaps;
+			$args{typemap} = \@typemaps;
+		}
+
 		$planner->parse_xs($xs_file, $c_file, %args, module => $module_name);
 
 		my $o_file = $planner->obj_file(basename($c_file, '.c'), $xs_dir);
