@@ -49,7 +49,7 @@ sub add_methods {
 						unshift @{ $args{$key} }, @{ $payload->{$key} || [] };
 					}
 
-					for my $key (%{ $payload->{defines} || {} }) {
+					for my $key (keys %{ $payload->{defines} // {} }) {
 						$args{defines}{$key} //= $payload->{defines}{$key};
 					}
 					$found++;
