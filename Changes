@@ -6,6 +6,7 @@ Revision history for Dist-Build
           - Remove use of ExtUtils::HasCompiler from test
           - Always pass typemaps as absolute paths
           - Don't use config file define values as keys
+          - Always set dynamic_config=0 in MYMETA
 
 0.022     2025-11-27 23:07:13+01:00 Europe/Brussels
           - Move Dist::Build::DynamicPrereqs to a separate dist

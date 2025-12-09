@@ -130,14 +130,15 @@ sub Build_PL {
 	save_json(catfile(qw/_build graph/), $serializer->serialize_plan($plan));
 	save_json(catfile(qw/_build params/), [ $args, \@env ]);
 
+	my $metahash = $meta->as_struct;
 	if (@meta_fragments) {
 		require CPAN::Meta::Merge;
 		my $merger = CPAN::Meta::Merge->new(default_version => '2');
-		my $metahash = $merger->merge($meta, @meta_fragments);
-		$metahash->{dynamic_config} = 0;
-		$meta = CPAN::Meta->create($metahash, { lazy_validation => 0 });
+		$metahash = $merger->merge($metahash, @meta_fragments);
 	}
-	$meta->save('MYMETA.json');
+	$metahash->{dynamic_config} = 0;
+	my $mymeta = CPAN::Meta->create($metahash, { lazy_validation => 0 });
+	$mymeta->save('MYMETA.json');
 
 	printf "Creating new 'Build' script for '%s' version '%s'\n", $meta->name, $meta->version;
 	my $dir = $meta->name eq 'Dist-Build' ? 'lib' : 'inc';
