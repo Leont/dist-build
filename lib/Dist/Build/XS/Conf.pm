@@ -15,7 +15,7 @@ sub add_methods {
 	$planner->add_delegate('add_xs', sub {
 		my ($planner, %args) = @_;
 
-		for my $key (qw/include_dirs library_dirs libraries extra_compiler_flags extra_linker_flags/) {
+		for my $key (qw/include_dirs library_dirs libraries extra_compiler_flags extra_linker_flags extra_sources extra_objects/) {
 			push @{ $args{$key} }, $planner->$key;
 		}
 

@@ -7,6 +7,7 @@ Revision history for Dist-Build
           - Always pass typemaps as absolute paths
           - Don't use config file define values as keys
           - Always set dynamic_config=0 in MYMETA
+          - Add extra_sources and extra_objects support to Dist::Build::XS::Conf
 
 0.022     2025-11-27 23:07:13+01:00 Europe/Brussels
           - Move Dist::Build::DynamicPrereqs to a separate dist
