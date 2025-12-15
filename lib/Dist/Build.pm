@@ -72,33 +72,12 @@ sub Build_PL {
 	$planner->create_phony('pure_all', 'code', 'manify', 'dynamic');
 	$planner->create_phony('build', 'pure_all');
 
+	$planner->load_extension('ExtUtils::Builder::CPAN::Tool');
 	$planner->add_delegate('meta', sub { $meta });
-	$planner->add_delegate('distribution', sub { $meta->name });
-	$planner->add_delegate('version', sub { version->new($meta->version) });
-	(my $main_module = $meta->name) =~ s/-/::/g;
-	$planner->add_delegate('main_module', sub { $main_module });
-	$planner->add_delegate('release_status', sub { $meta->release_status });
-	$planner->add_delegate('perl_path', sub { get_perl(config => $options{config}, %options) });
 
 	for my $variable (qw/config install_paths verbose uninst jobs pureperl_only/) {
 		$planner->add_delegate($variable, sub { $options{$variable} });
 	}
-
-	$planner->add_delegate('is_os', sub {
-			my ($self, @wanted) = @_;
-			return not not grep { $_ eq $^O } @wanted
-	});
-	$planner->add_delegate('is_os_type', sub {
-			my ($self, $wanted) = @_;
-			require Perl::OSType;
-			return Perl::OSType::is_os_type($wanted);
-	});
-
-	$planner->add_delegate('new_planner', sub {
-		my $inner = ExtUtils::Builder::Planner->new;
-		$inner->add_delegate('config', sub { $options{config} });
-		return $inner;
-	});
 
 	my @meta_fragments;
 	$planner->add_delegate('add_meta', sub {
@@ -233,7 +212,7 @@ This module contains all commands used for the base actions of the module.
 
 =head1 DELEGATES
 
-By default, the following delegates are defined on your L<planner|ExtUtils::Builder::Planner>:
+All the usual delegates of the L<ExtUtils::Builder::CPAN::Tool> are defined on your L<planner|ExtUtils::Builder::Planner>, and additionally C<install_paths>.
 
 =over 4
 
