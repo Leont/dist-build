@@ -1,6 +1,7 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+          - Allow C files as add_xs input
           - Add dependencies entry to extra_sources
 
 0.024     2025-12-16 21:43:32+01:00 Europe/Brussels

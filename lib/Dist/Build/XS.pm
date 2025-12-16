@@ -28,7 +28,7 @@ sub add_methods {
 
 		my $config = $args{config} // $planner->config;
 
-		$planner->load_extension('ExtUtils::Builder::ParseXS',       0.016, config => $config) unless $planner->can('parse_xs');
+		$planner->load_extension('ExtUtils::Builder::ParseXS',       0.034, config => $config) unless $planner->can('parse_xs');
 		$planner->load_extension('ExtUtils::Builder::AutoDetect::C', 0.016, config => $config) unless $planner->can('compile');
 
 		my $xs_base = $args{xs_base} // 'lib';
@@ -43,20 +43,30 @@ sub add_methods {
 			$module_name = $planner->main_module;
 			$xs_file = catfile($xs_base, split /::/, $module_name) . '.xs';
 		}
-		my $module_version = $args{version} // $planner->version;
 
-		my $xs_dir = dirname($xs_file);
-		my $c_file = $planner->c_file_for_xs($xs_file, $xs_dir);
+		my $source_dir = dirname($xs_file);
+		my $c_file;
 
-		if (my $typemap = $args{typemap}) {
-			my @typemaps = ref $args{typemap} ? @{ $typemap } : $typemap;
-			$_ = rel2abs($_) for @typemaps;
-			$args{typemap} = \@typemaps;
+		if ($xs_file =~ /\.c$/) {
+			$c_file = $xs_file;
+		} else {
+			$c_file = $planner->c_file_for_xs($xs_file, $source_dir);
+
+			if (my $typemap = $args{typemap}) {
+				my @typemaps = ref $args{typemap} ? @{ $typemap } : $typemap;
+				$_ = rel2abs($_) for @typemaps;
+				$args{typemap} = \@typemaps;
+			}
+			my %parse_args;
+			$parse_args{$_} = $args{$_} for grep { exists $args{$_} } qw/typemap versioncheck prototypes/;
+			$parse_args{dependencies} = $args{xs_dependencies} if exists $args{xs_dependencies};
+
+			$planner->parse_xs($xs_file, $c_file, %parse_args, module => $module_name);
 		}
 
-		$planner->parse_xs($xs_file, $c_file, %args, module => $module_name);
+		my $o_file = $planner->obj_file(basename($c_file, '.c'), $source_dir);
 
-		my $o_file = $planner->obj_file(basename($c_file, '.c'), $xs_dir);
+		my $module_version = $args{version} // $planner->version;
 
 		my %defines = (
 			%{ $args{defines} // {} },
@@ -72,6 +82,7 @@ sub add_methods {
 			include_dirs => [ dirname($xs_file), @{ $args{include_dirs} // [] } ],
 			extra_args   => $compiler_flags,
 			config       => $config,
+			dependencies => $args{dependencies},
 		);
 
 		my @objects = $o_file;
