@@ -1,6 +1,7 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+          - Add dependencies entry to extra_sources
 
 0.024     2025-12-16 21:43:32+01:00 Europe/Brussels
           - Don't copy Dist::Build runtime dependencies to configure until they're all known

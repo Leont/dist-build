@@ -83,6 +83,7 @@ sub add_methods {
 			my %defines = (%{ $args{defines} // {} }, %{ $options{defines} // {} });
 			my @include_dirs = (@{ $args{include_dirs} // [] }, @{ $options{include_dirs} // [] });
 			my @compiler_flags = (@{ $compiler_flags // [] }, @{ $options{flags} // [] });
+			my @dependencies = (@{ $args{dependencies} // [] }, @{ $options{dependencies} // [] });
 			$planner->compile($options{source}, $object,
 				type         => 'loadable-object',
 				profile      => '@Perl',
@@ -90,6 +91,7 @@ sub add_methods {
 				include_dirs => \@include_dirs,
 				extra_args   => \@compiler_flags,
 				config       => $config,
+				dependencies => \@dependencies,
 			);
 			push @objects, $object;
 		}
@@ -207,6 +209,10 @@ A hash containing additional defines for this object.
 =item * flags
 
 An array containing additional flags for this compilation.
+
+=item * dependencies
+
+An array containing additional dependencies for this compilation.
 
 =back
 
