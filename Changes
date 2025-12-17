@@ -1,6 +1,7 @@
 Revision history for Dist-Build
 
 {{$NEXT}}
+          - Add support for language standard argument
           - Allow C files as add_xs input
           - Add dependencies entry to extra_sources
 

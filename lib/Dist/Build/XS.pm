@@ -83,6 +83,7 @@ sub add_methods {
 			extra_args   => $compiler_flags,
 			config       => $config,
 			dependencies => $args{dependencies},
+			standard     => $args{standard},
 		);
 
 		my @objects = $o_file;
@@ -95,6 +96,7 @@ sub add_methods {
 			my @include_dirs = (@{ $args{include_dirs} // [] }, @{ $options{include_dirs} // [] });
 			my @compiler_flags = (@{ $compiler_flags // [] }, @{ $options{flags} // [] });
 			my @dependencies = (@{ $args{dependencies} // [] }, @{ $options{dependencies} // [] });
+			my $standard = exists $options{standard} ? $options{standard} : $args{standard};
 			$planner->compile($options{source}, $object,
 				type         => 'loadable-object',
 				profile      => '@Perl',
@@ -103,6 +105,7 @@ sub add_methods {
 				extra_args   => \@compiler_flags,
 				config       => $config,
 				dependencies => \@dependencies,
+				standard     => $standard,
 			);
 			push @objects, $object;
 		}
