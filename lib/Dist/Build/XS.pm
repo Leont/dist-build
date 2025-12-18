@@ -47,6 +47,8 @@ sub add_methods {
 		my $source_dir = dirname($xs_file);
 		my $c_file;
 
+		my $language = $args{language} // 'C';
+
 		if ($xs_file =~ /\.c$/) {
 			$c_file = $xs_file;
 		} else {
@@ -60,6 +62,7 @@ sub add_methods {
 			my %parse_args;
 			$parse_args{$_} = $args{$_} for grep { exists $args{$_} } qw/typemap versioncheck prototypes/;
 			$parse_args{dependencies} = $args{xs_dependencies} if exists $args{xs_dependencies};
+			$parse_args{hiertypes} = 1 if uc $language eq 'C++';
 
 			$planner->parse_xs($xs_file, $c_file, %parse_args, module => $module_name);
 		}
@@ -83,6 +86,7 @@ sub add_methods {
 			extra_args   => $compiler_flags,
 			config       => $config,
 			dependencies => $args{dependencies},
+			language     => $language,
 			standard     => $args{standard},
 		);
 
@@ -105,6 +109,7 @@ sub add_methods {
 				extra_args   => \@compiler_flags,
 				config       => $config,
 				dependencies => \@dependencies,
+				language     => $language,
 				standard     => $standard,
 			);
 			push @objects, $object;
@@ -122,6 +127,7 @@ sub add_methods {
 			library_dirs => $args{library_dirs},
 			libraries    => $args{libraries},
 			config       => $config,
+			language     => $language,
 		);
 
 		$planner->create_phony('dynamic', $lib_file);
