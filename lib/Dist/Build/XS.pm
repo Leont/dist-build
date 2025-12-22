@@ -80,7 +80,7 @@ sub add_methods {
 		my $compiler_flags = get_flags($args{extra_compiler_flags});
 		$planner->compile($c_file, $o_file,
 			type         => 'loadable-object',
-			profile      => '@Perl',
+			profiles     => ['@Perl'],
 			defines      => \%defines,
 			include_dirs => [ dirname($xs_file), @{ $args{include_dirs} // [] } ],
 			extra_args   => $compiler_flags,
@@ -103,7 +103,7 @@ sub add_methods {
 			my $standard = exists $options{standard} ? $options{standard} : $args{standard};
 			$planner->compile($options{source}, $object,
 				type         => 'loadable-object',
-				profile      => '@Perl',
+				profiles     => ['@Perl'],
 				defines      => \%defines,
 				include_dirs => \@include_dirs,
 				extra_args   => \@compiler_flags,
@@ -120,7 +120,7 @@ sub add_methods {
 		my $lib_file = $planner->extension_filename($module_name);
 		$planner->link(\@objects, $lib_file,
 			type         => 'loadable-object',
-			profile      => '@Perl',
+			profiles     => ['@Perl'],
 			module_name  => $module_name,
 			mkdir        => 1,
 			extra_args   => get_flags($args{extra_linker_flags}),
