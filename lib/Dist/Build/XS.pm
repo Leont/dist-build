@@ -28,8 +28,8 @@ sub add_methods {
 
 		my $config = $args{config} // $planner->config;
 
-		$planner->load_extension('ExtUtils::Builder::ParseXS',       0.034, config => $config) unless $planner->can('parse_xs');
-		$planner->load_extension('ExtUtils::Builder::AutoDetect::C', 0.016, config => $config) unless $planner->can('compile');
+		$planner->load_extension('ExtUtils::Builder::ParseXS',              0.034, config => $config) unless $planner->can('parse_xs');
+		$planner->load_extension('ExtUtils::Builder::BuildTools::FromPerl', 0.034, config => $config) unless $planner->can('compile');
 
 		my $xs_base = $args{xs_base} // 'lib';
 		my ($module_name, $xs_file);
@@ -84,7 +84,6 @@ sub add_methods {
 			defines      => \%defines,
 			include_dirs => [ dirname($xs_file), @{ $args{include_dirs} // [] } ],
 			extra_args   => $compiler_flags,
-			config       => $config,
 			dependencies => $args{dependencies},
 			language     => $language,
 			standard     => $args{standard},
@@ -107,7 +106,6 @@ sub add_methods {
 				defines      => \%defines,
 				include_dirs => \@include_dirs,
 				extra_args   => \@compiler_flags,
-				config       => $config,
 				dependencies => \@dependencies,
 				language     => $language,
 				standard     => $standard,
@@ -126,7 +124,6 @@ sub add_methods {
 			extra_args   => get_flags($args{extra_linker_flags}),
 			library_dirs => $args{library_dirs},
 			libraries    => $args{libraries},
-			config       => $config,
 			language     => $language,
 		);
 
