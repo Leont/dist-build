@@ -76,7 +76,7 @@ sub Build_PL {
 	$planner->add_delegate('meta', sub { $meta });
 
 	for my $variable (qw/config install_paths verbose uninst jobs pureperl_only/) {
-		$planner->add_delegate($variable, sub { $options{$variable} });
+		$planner->add_delegate($variable, sub { $options{$variable} }) if exists $options{$variable};
 	}
 
 	my @meta_fragments;
