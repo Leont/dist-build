@@ -18,13 +18,11 @@ use File::Path qw/make_path remove_tree/;
 use File::Spec::Functions qw/catdir catfile abs2rel rel2abs/;
 use Parse::CPAN::Meta;
 
-use ExtUtils::Builder::Util qw/get_perl command/;
-use ExtUtils::Builder::Node;
-use ExtUtils::Builder::Action::Function;
+use ExtUtils::Builder::Util qw/get_perl command function/;
 
 sub new_action {
 	my ($name, @args) = @_;
-	return ExtUtils::Builder::Action::Function->new(
+	return function(
 		function  => $name,
 		module    => __PACKAGE__,
 		arguments => \@args,
@@ -87,7 +85,7 @@ sub add_methods {
 
 	$planner->add_delegate('mkdir', sub {
 		my ($planner, $target, %options) = @_;
-		my $action = ExtUtils::Builder::Action::Function->new(
+		my $action = function(
 			function  => 'make_path',
 			module    => 'File::Path',
 			arguments => [ $target, %options ],
@@ -287,7 +285,7 @@ sub add_methods {
 		my ($planner) = @_;
 		my @targets = grep { !/^blib\b/ } map { $_->target } grep { ! $_->phony } $planner->materialize->nodes;
 
-		my $clean_action = ExtUtils::Builder::Action::Function->new(
+		my $clean_action = function(
 			function  => 'remove_tree',
 			module    => 'File::Path',
 			arguments => [ 'blib', @targets ],
@@ -301,7 +299,7 @@ sub add_methods {
 		);
 
 		my @real_targets = qw/Build _build MYMETA.json MYMETA.yml/;
-		my $realclean_action = ExtUtils::Builder::Action::Function->new(
+		my $realclean_action = function(
 			function  => 'remove_tree',
 			module    => 'File::Path',
 			arguments => \@real_targets,

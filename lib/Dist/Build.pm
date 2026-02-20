@@ -39,7 +39,9 @@ sub save_json {
 	return;
 }
 
-my @options = qw/install_base=s install_path=s% installdirs=s destdir=s prefix=s config=s% uninst:1 verbose:1 dry_run:1 pureperl_only|pureperl-only:1 create_packlist=i jobs=i allow_mb_mismatch:1/;
+my @options = qw/install_base=s install_path=s% installdirs=s destdir=s prefix=s
+   config=s% uninst:1 verbose:1 dry_run:1 pureperl_only|pureperl-only:1 create_packlist=i
+   jobs=i allow_mb_mismatch:1/;
 
 sub get_config {
 	my ($meta_name, @arguments) = @_;
@@ -47,9 +49,7 @@ sub get_config {
 	GetOptionsFromArray($_, \%options, @options) or die "Could not parse arguments" for @arguments;
 
 	$options{$_} = detildefy($options{$_}) for grep { exists $options{$_} } qw/install_base destdir prefix/;
-	if ($options{install_path}) {
-		$_ = detildefy($_) for values %{ $options{install_path} };
-	}
+	$_ = detildefy($_) for values %{ $options{install_path} // {} };
 	$options{config} = ExtUtils::Config->new($options{config});
 	$options{install_paths} = ExtUtils::InstallPaths->new(%options, dist_name => $meta_name);
 
