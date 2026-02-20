@@ -18,6 +18,7 @@ use File::Path qw/make_path remove_tree/;
 use File::Spec::Functions qw/catdir catfile abs2rel rel2abs/;
 use Parse::CPAN::Meta;
 
+use ExtUtils::Builder::Util qw/get_perl command/;
 use ExtUtils::Builder::Node;
 use ExtUtils::Builder::Action::Function;
 
@@ -262,6 +263,26 @@ sub add_methods {
 		}
 	});
 
+	$planner->add_delegate('auto_PL' => sub {
+		my ($planner, $dir, %args) = @_;
+		$dir //= 'lib';
+		my $pattern = $planner->create_pattern(dir => $dir, file => '*.PL');
+		$planner->create_subst(
+			on    => $pattern,
+			subst => sub {
+				my ($source) = @_;
+				my $target = $source =~ s/\.PL\z//r;
+				$planner->create_node(
+					target       => $target,
+					dependencies => [ $source ],
+					actions      => [
+						command(get_perl(%args), $source, $target),
+					],
+				);
+			},
+		);
+	});
+
 	$planner->add_delegate('autoclean', sub {
 		my ($planner) = @_;
 		my @targets = grep { !/^blib\b/ } map { $_->target } grep { ! $_->phony } $planner->materialize->nodes;
@@ -435,6 +456,10 @@ This enables verbose mode.
 This uninstalls files before installing the new ones.
 
 =back
+
+=item * auto_PL($dir)
+
+This will find any C<foo.PL> file and run them to generate the matching C<foo> file. It takes one optional argument: C<$dir>, the directory that will be searched. It defaults to C<'lib'>.
 
 =item * dump_binary($filename, $content, %named_arguments)
 
