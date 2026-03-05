@@ -269,7 +269,7 @@ sub add_methods {
 			on    => $pattern,
 			subst => sub {
 				my ($source) = @_;
-				my $target = $source =~ s/\.PL\z//r;
+				(my $target = $source) =~ s/\.PL\z//;
 				$planner->create_node(
 					target       => $target,
 					dependencies => [ $source ],
