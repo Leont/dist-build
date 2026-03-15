@@ -18,6 +18,7 @@ sub add_methods {
 		for my $key (qw/include_dirs library_dirs libraries extra_compiler_flags extra_linker_flags extra_sources extra_objects/) {
 			push @{ $args{$key} }, $planner->$key;
 		}
+		$args{standard} //= $planner->standard;
 
 		my %defines = $planner->defines;
 		for my $key (keys %defines) {

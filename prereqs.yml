@@ -3,7 +3,7 @@ runtime:
     perl: 5.010
     CPAN::Meta: 2.142060
     ExtUtils::Builder: 0.020
-    ExtUtils::Builder::Compiler: 0.034
+    ExtUtils::Builder::Compiler: 0.036
     ExtUtils::Config: 0
     ExtUtils::InstallPaths: 0
     ExtUtils::Helpers: 0.028
