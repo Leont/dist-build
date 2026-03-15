@@ -36,7 +36,7 @@ sub add_methods {
  load_extension("Dist::Build::XS");
  load_extension("Dist::Build::XS::Conf");
  
- find_libs_for(source => <<'EOF', libs => [ ['socket'], ['moonlaser'] ]);
+ find_libraries_for(source => <<'EOF', libs => [ ['socket'], ['moonlaser'] ]);
  #include <stdio.h>
  #include <sys/socket.h>
  int main(int argc, char *argv[]) {
