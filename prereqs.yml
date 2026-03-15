@@ -10,6 +10,7 @@ runtime:
     Getopt::Long: 2.36
     List::Util: 1.33
     TAP::Harness: 3.29
+    parent: 0
 test:
   requires:
     Test::More: 0.88
