@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Install cpanminus
         run: |
           curl https://cpanmin.us/ > /tmp/cpanm
@@ -66,7 +68,7 @@ jobs:
         run: tar zxvf Dist-To-Test.tar.gz
       - name: Install dependencies
         working-directory: ./Dist-To-Test
-        run: cpanm --installdeps --notest .
+        run: cpanm --installdeps --notest -v .
       - name: Configure
         working-directory: ./Dist-To-Test
         run: perl Build.PL
